@@ -1,0 +1,19 @@
+{
+	"name": "janpecha/code-checker",
+	"type": "library",
+	"description": "Code checker.",
+	"license": "BSD-3-Clause",
+	"authors": [
+		{
+			"name": "Jan Pecha",
+			"homepage": "https://www.janpecha.cz/"
+		}
+	],
+	"require": {
+		"php": ">=7.2.0",
+		"nette/code-checker": "^3.2"
+	},
+	"autoload": {
+		"classmap": ["src/"]
+	}
+}
