@@ -1,0 +1,22 @@
+{* deprecated in Latte 2.4 *}
+{$var|filter|breaklines}
+{php $i++}
+
+<?php $a = 0; ?>
+{$template->translate('abc')}
+{$_l}
+{$_g}
+
+{includeblock ...}
+
+{use abc}
+{status 404}
+{!$expr}
+{$abc|nl2br}
+{$abc|safeurl}
+
+{* added in Latte 2.8 *}
+{$ʟ_}
+
+{* disabled in Latte 2.9 *}
+{$__}

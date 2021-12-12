@@ -33,7 +33,7 @@
 			$checker = new \Nette\CodeChecker\Checker;
 
 			foreach ($config->getIgnore() as $ignore) {
-				$checker->addIgnore($ignore);
+				$checker->ignore[] = $ignore;
 			}
 
 			foreach ($tasks as $task) {

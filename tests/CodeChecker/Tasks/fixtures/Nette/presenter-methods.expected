@@ -1,0 +1,14 @@
+<?php
+
+	namespace MyApp\Presenters;
+
+
+	class Test extends \Nette\Application\UI\Presenter
+	{
+		public function actionDefault()
+		{
+			if ($this->isMethod('POST')) {
+				$this->terminate();
+			}
+		}
+	}

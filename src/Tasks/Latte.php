@@ -5,38 +5,57 @@
 	namespace JP\CodeChecker\Tasks;
 
 	use JP\CodeChecker\CheckerConfig;
+	use JP\CodeChecker\Version;
 	use Nette\CodeChecker\Result;
 	use Nette\Utils\Strings;
 
 
 	class Latte
 	{
-		public static function configure(CheckerConfig $config): void
+		/** @var Version */
+		private $version;
+
+
+		public function __construct(Version $version)
 		{
-			$tasks = \Nette\CodeChecker\Tasks::class;
-			$config->addTask([$tasks, 'latteSyntaxChecker'], '*.latte');
-			$config->addTask([self::class, 'deprecatedFixer'], '*.latte');
+			$this->version = $version;
 		}
 
 
-		public static function deprecatedFixer(string &$contents, Result $result): void
+		public static function configure(CheckerConfig $config, Version $version): void
 		{
-			Helpers::findAndReplace(
-				$contents,
-				$result,
-				'#\\|escape\\|nl2br\\|noescape#m',
-				'|breaklines',
-				'Latte: filter |nl2br replaced by filter |breaklines  (deprecated in v2.4)'
-			);
+			$config->addTask([\Nette\CodeChecker\Tasks::class, 'latteSyntaxChecker'], '*.latte');
 
-			Helpers::findAndReplace(
-				$contents,
-				$result,
-				'#{\\?\\s*#m',
-				'{php ',
-				'Latte: tag {? expr} replaced by tag {php}  (deprecated in v2.4)'
-			);
+			$me = new self($version);
+			$config->addTask([$me, 'deprecatedFixer'], '*.latte');
+			$config->addTask([$me, 'deprecatedChecker'], '*.latte');
+		}
 
+
+		public function deprecatedFixer(string &$contents, Result $result): void
+		{
+			if ($this->version->isEqualOrGreater('2.4.0')) {
+				Helpers::findAndReplace(
+					$contents,
+					$result,
+					'#\\|escape\\|nl2br\\|noescape#m',
+					'|breaklines',
+					'Latte: filter |nl2br replaced by filter |breaklines  (deprecated in v2.4)'
+				);
+
+				Helpers::findAndReplace(
+					$contents,
+					$result,
+					'#{\\?\\s*#m',
+					'{php ',
+					'Latte: tag {? expr} replaced by tag {php}  (deprecated in v2.4)'
+				);
+			}
+		}
+
+
+		public function deprecatedChecker(string &$contents, Result $result): void
+		{
 			if (Strings::contains($contents, '<?php')) {
 				$result->error('Latte: template contains <?php open tag (deprecated in v2.4)');
 			}
@@ -51,6 +70,14 @@
 
 			if (Strings::contains($contents, '$_g')) {
 				$result->warning('Latte: uses deprecated variable $_g (deprecated in v2.4)');
+			}
+
+			if (Strings::contains($contents, '$__')) {
+				$result->error('Latte: uses internal variable $__* (disabled in v2.9)');
+			}
+
+			if (Strings::contains($contents, '$ʟ_')) {
+				$result->error('Latte: uses internal variable $ʟ_* (added in v2.8)');
 			}
 
 			if (self::containsTag($contents, 'includeblock')) {
@@ -72,6 +99,12 @@
 			if (self::containsFilter($contents, 'nl2br')) {
 				$result->error('Latte: uses deprecated filter |nl2br (deprecated in v2.4)');
 			}
+
+			if (self::containsFilter($contents, 'safeurl')) {
+				$result->error('Latte: uses deprecated filter |safeurl (deprecated in v2.4)');
+			}
+
+			// TODO {extends} musi byt v hlavicce
 		}
 
 
@@ -83,6 +116,6 @@
 
 		private static function containsFilter(string $contents, string $filter): bool
 		{
-			return (bool) Strings::match($contents, '#\\|' . preg_quote($filter, '#') . '(}|:|\\|)#m');
+			return (bool) Strings::match($contents, '#\\|' . preg_quote($filter, '#') . '(}|:|\\)|\\|)#m');
 		}
 	}

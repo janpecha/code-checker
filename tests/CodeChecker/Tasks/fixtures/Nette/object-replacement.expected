@@ -1,0 +1,29 @@
+<?php
+
+	namespace MyApp\Model;
+
+	use Nette;
+
+
+	class Test
+	{
+		use \Nette\SmartObject;
+
+		private $abc;
+	}
+
+
+	class Test2
+	{
+		use Nette\SmartObject;
+
+		private $abc;
+	}
+
+
+	class Test3 implements \App\ISome
+	{
+		use Nette\SmartObject;
+
+		private $abc;
+	}

@@ -1,0 +1,23 @@
+<?php
+
+	namespace MyApp\Model;
+
+	use Nette;
+
+
+	class Test extends \Nette\Object
+	{
+		private $abc;
+	}
+
+
+	class Test2 extends Nette\Object
+	{
+		private $abc;
+	}
+
+
+	class Test3 extends Nette\Object implements \App\ISome
+	{
+		private $abc;
+	}

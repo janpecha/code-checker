@@ -5,15 +5,12 @@
 	namespace JP\CodeChecker\Tasks;
 
 	use JP\CodeChecker\CheckerConfig;
+	use JP\CodeChecker\Version;
 
 
 	class Php
 	{
-		const VERSION_5_6 = 50600;
-		const VERSION_7_2 = 70200;
-
-
-		public static function configure(CheckerConfig $config, int $phpVersion): void
+		public static function configure(CheckerConfig $config, Version $phpVersion): void
 		{
 			$tasks = \Nette\CodeChecker\Tasks::class;
 			$config->addTask([$tasks, 'phpSyntaxChecker'], '*.php,*.phpt');
@@ -23,11 +20,11 @@
 			$config->addTask([$tasks, 'tabIndentationPhpChecker'], '*.php,*.phpt');
 			$config->addTask([$tasks, 'docSyntaxtHinter'], '*.php,*.phpt');
 
-			if ($phpVersion >= self::VERSION_5_6) {
+			if ($phpVersion->isEqualOrGreater('5.6.0')) {
 				$config->addTask([$tasks, 'shortArraySyntaxFixer'], '*.php,*.phpt');
 			}
 
-			if ($phpVersion >= self::VERSION_7_2) {
+			if ($phpVersion->isEqualOrGreater('7.2.0')) {
 				$config->addTask([$tasks, 'strictTypesDeclarationChecker'], '*.php,*.phpt');
 			}
 		}

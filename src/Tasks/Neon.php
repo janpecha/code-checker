@@ -20,12 +20,13 @@
 
 		public static function keywordsFixer(string &$contents, Result $result): void
 		{
+			// TODO BUG: nechce nahrazovat druhy pattern v poradi :-/
 			Helpers::findAndReplaces(
 				$contents,
 				$result,
 				[
-					'#(:\s)on$#m' => '$1yes',
-					'#(:\s)off$#m' => '$1no',
+					'#(:\\s)on$#m' => '$1yes',
+					'#(:\\s)off$#m' => '$1no',
 				],
 				'Neon: keywords on/off changed to yes/no (deprecated in v3.1)'
 			);

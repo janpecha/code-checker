@@ -11,7 +11,11 @@
 	],
 	"require": {
 		"php": ">=7.2.0",
-		"nette/code-checker": "^3.2"
+		"nette/code-checker": "^3.2",
+		"czproject/assert": "^1.4"
+	},
+	"require-dev": {
+		"nette/tester": "^2.4"
 	},
 	"autoload": {
 		"classmap": ["src/"]

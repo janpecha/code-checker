@@ -10,6 +10,9 @@
 
 	class Helpers
 	{
+		/**
+		 * @param  array<string, string> $replacements
+		 */
 		public static function findAndReplaces(
 			string &$contents,
 			Result $result,
@@ -20,13 +23,15 @@
 			$fixed = FALSE;
 
 			foreach ($replacements as $pattern => $replacement) {
-				$fixed = $fixed || self::findAndReplace(
+				$res = self::findAndReplace(
 					$contents,
 					$result,
 					$pattern,
 					$replacement,
 					NULL
 				);
+
+				$fixed = $fixed || $res;
 			}
 
 			if ($fixed) {
