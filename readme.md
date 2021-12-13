@@ -28,6 +28,20 @@ Options:
     --no-progress         Do not show progress dots
 ```
 
+Config file `code-checker.php`:
+
+```php
+<?php
+
+return function (JP\CodeChecker\CheckerConfig $config) {
+	$config->addPath(__DIR__ . '/app');
+
+	JP\CodeChecker\Tasks\Files::configure($config);
+	JP\CodeChecker\Tasks\Php::configure($config, new JP\CodeChecker\Version('7.4.0'));
+	JP\CodeChecker\Tasks\Nette::configure($config, new JP\CodeChecker\Version('2.4.0'));
+};
+```
+
 Based on [Nette\CodeChecker](https://github.com/nette/code-checker).
 
 ------------------------------
