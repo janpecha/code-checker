@@ -4,17 +4,17 @@
 
 	namespace JP\CodeChecker\Tasks;
 
+	use JP\CodeChecker\ComposerVersions;
 	use JP\CodeChecker\CheckerConfig;
-	use JP\CodeChecker\Version;
 	use Nette\CodeChecker\Result;
 
 
 	class Nette
 	{
-		public static function configure(CheckerConfig $config, Version $version): void
+		public static function configure(CheckerConfig $config, ComposerVersions $composerVersions): void
 		{
 			Neon::configure($config);
-			Latte::configure($config, $version);
+			Latte::configure($config, $composerVersions->getVersion('latte/latte'));
 			$config->addTask([self::class, 'netteObjectFixer'], '*.php');
 			$config->addTask([self::class, 'presenterMethods'], '*.php');
 		}

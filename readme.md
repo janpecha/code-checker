@@ -38,7 +38,8 @@ return function (JP\CodeChecker\CheckerConfig $config) {
 
 	JP\CodeChecker\Tasks\Files::configure($config);
 	JP\CodeChecker\Tasks\Php::configure($config, new JP\CodeChecker\Version('7.4.0'));
-	JP\CodeChecker\Tasks\Nette::configure($config, new JP\CodeChecker\Version('2.4.0'));
+	$composerVersions = JP\CodeChecker\ComposerVersions::create(__DIR__ . '/composer.json');
+	JP\CodeChecker\Tasks\Nette::configure($config, $composerVersions);
 };
 ```
 
