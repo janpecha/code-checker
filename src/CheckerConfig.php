@@ -13,7 +13,7 @@
 		/** @var string[] */
 		private $ignore = [];
 
-		/** @var array<array{0: callable, 1: string|NULL}> */
+		/** @var Task[] */
 		private $tasks = [];
 
 
@@ -50,7 +50,7 @@
 
 
 		/**
-		 * @return array<array{0: callable, 1: string|NULL}>
+		 * @return Task[]
 		 */
 		public function getTasks(): array
 		{
@@ -60,6 +60,6 @@
 
 		public function addTask(callable $task, string $pattern = NULL): void
 		{
-			$this->tasks[] = [$task, $pattern];
+			$this->tasks[] = new Task($task, $pattern);
 		}
 	}

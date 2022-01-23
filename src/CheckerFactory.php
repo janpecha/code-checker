@@ -7,7 +7,23 @@
 
 	class CheckerFactory
 	{
-		public static function create(string $configFile): CheckerRunner
+		public static $accept = [
+			'*.php', '*.phpt', '*.inc',
+			'*.txt', '*.texy', '*.md',
+			'*.css', '*.less', '*.sass', '*.scss', '*.js', '*.json', '*.latte', '*.htm', '*.html', '*.phtml', '*.xml',
+			'*.ini', '*.neon', '*.yml',
+			'*.sh', '*.bat',
+			'*.sql',
+			'.htaccess', '.gitignore',
+		];
+
+		public static $ignore = [
+			'.git', '.svn', '.idea', '*.tmp', 'tmp', 'temp', 'log', 'vendor', 'node_modules', 'bower_components',
+			'*.min.js', 'package.json', 'package-lock.json',
+		];
+
+
+		public static function create(string $configFile): Checker
 		{
 			$configurator = self::loadFile($configFile);
 			$config = new CheckerConfig;
@@ -17,7 +33,7 @@
 		}
 
 
-		private static function createChecker(CheckerConfig $config): CheckerRunner
+		private static function createChecker(CheckerConfig $config): Checker
 		{
 			$paths = $config->getPaths();
 			$tasks = $config->getTasks();
@@ -30,17 +46,14 @@
 				throw new \RuntimeException('Missing tasks, use method ' . CheckerConfig::class . '::addTask().');
 			}
 
-			$checker = new \Nette\CodeChecker\Checker;
+			$checker = new Checker(
+				$paths,
+				self::$accept,
+				array_merge(self::$ignore, $config->getIgnore()),
+				$tasks
+			);
 
-			foreach ($config->getIgnore() as $ignore) {
-				$checker->ignore[] = $ignore;
-			}
-
-			foreach ($tasks as $task) {
-				$checker->addTask($task[0], $task[1]);
-			}
-
-			return new CheckerRunner($checker, $paths);
+			return $checker;
 		}
 
 
