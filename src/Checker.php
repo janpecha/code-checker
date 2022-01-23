@@ -42,6 +42,7 @@
 
 		public function run(
 			bool $readOnly,
+			bool $stepByStep,
 			bool $showProgress
 		): bool
 		{
@@ -53,18 +54,38 @@
 
 			echo "Scanning {$console->color('white', implode(', ', $this->paths))}\n";
 
-			$iterator = $this->createFileIterator();
-
 			$counter = 0;
 			$success = TRUE;
 
-			foreach ($iterator as $file) {
-				if ($showProgress) {
-					echo str_pad(str_repeat('.', $counter++ % 40), 40), "\x0D";
+			if ($stepByStep) {
+				foreach ($this->tasks as $task) {
+					$iterator = $this->createFileIterator();
+
+					foreach ($iterator as $file) {
+						if ($showProgress) {
+							echo str_pad(str_repeat('.', $counter++ % 40), 40), "\x0D";
+						}
+
+						$file = (string) $file;
+						$success = $this->processFile([$task], $file, $readOnly, $stepByStep, $console) && $success;
+					}
+
+					if (!$success) {
+						break;
+					}
 				}
 
-				$file = (string) $file;
-				$success = $this->processFile($file, $readOnly, $console) && $success;
+			} else {
+				$iterator = $this->createFileIterator();
+
+				foreach ($iterator as $file) {
+					if ($showProgress) {
+						echo str_pad(str_repeat('.', $counter++ % 40), 40), "\x0D";
+					}
+
+					$file = (string) $file;
+					$success = $this->processFile($this->tasks, $file, $readOnly, $stepByStep, $console) && $success;
+				}
 			}
 
 			if ($showProgress) {
@@ -96,12 +117,22 @@
 		}
 
 
-		private function processFile(string $file, bool $readOnly, \Nette\CommandLine\Console $console): bool
+		/**
+		 * @param  Task[] $tasks
+		 */
+		private function processFile(
+			array $tasks,
+			string $file,
+			bool $readOnly,
+			bool $stepByStep,
+			\Nette\CommandLine\Console $console
+		): bool
 		{
 			$error = FALSE;
+			$stepByStepFix = FALSE;
 			$origContents = $lastContents = file_get_contents($file);
 
-			foreach ($this->tasks as $task) {
+			foreach ($tasks as $task) {
 				$handler = $task->getHandler();
 				$pattern = $task->getPattern();
 
@@ -125,6 +156,7 @@
 					} elseif ($type === \Nette\CodeChecker\Result::FIX) {
 						$this->write($console, $file, $readOnly ? 'FOUND' : 'FIX', $message, $line, 'aqua');
 						$error = $error || $readOnly;
+						$stepByStepFix = $stepByStepFix || $stepByStep;
 					}
 				}
 
@@ -137,7 +169,7 @@
 				file_put_contents($file, $lastContents);
 			}
 
-			return !$error;
+			return !$error && !$stepByStepFix;
 		}
 
 

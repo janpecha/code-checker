@@ -55,6 +55,7 @@ Options:
     -c <path>             Config file
     -f | --fix            Fixes files
     --no-progress         Do not show progress dots
+    --step-by-step        Stops on change or report
 
 
 XX
@@ -95,6 +96,7 @@ if (!is_file($options['-c'])) {
 $checkerRunner = CheckerFactory::create($options['-c']);
 $ok = $checkerRunner->run(
 	!isset($options['--fix']),
+	isset($options['--step-by-step']),
 	!isset($options['--no-progress'])
 );
 
