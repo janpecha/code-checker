@@ -61,4 +61,20 @@
 
 			return $fixed;
 		}
+
+
+		public static function findAndWarn(
+			string &$contents,
+			Result $result,
+			string $pattern,
+			string $messageToUser
+		): bool
+		{
+			if (Strings::match($contents, $pattern)) {
+				$result->warning($messageToUser);
+				return TRUE;
+			}
+
+			return FALSE;
+		}
 	}
