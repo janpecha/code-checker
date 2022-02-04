@@ -25,6 +25,9 @@
 		/** @var Task[] */
 		private $tasks = [];
 
+		/** @var ComposerVersions|NULL */
+		private $composerVersions;
+
 
 		public function __construct(string $configFile)
 		{
@@ -71,6 +74,16 @@
 
 			$this->composerFile = $this->processPath($composerFile);
 			return $this;
+		}
+
+
+		public function getComposerVersions(): ComposerVersions
+		{
+			if ($this->composerVersions === NULL) {
+				$this->composerVersions = ComposerVersions::create($this->getComposerFile());
+			}
+
+			return $this->composerVersions;
 		}
 
 
