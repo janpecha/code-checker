@@ -98,7 +98,7 @@
 
 		public function addPath(string $path): self
 		{
-			$this->paths[] = $path;
+			$this->paths[] = $this->processPath($path);
 			return $this;
 		}
 
