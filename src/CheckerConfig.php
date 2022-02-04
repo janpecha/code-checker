@@ -25,6 +25,9 @@
 		/** @var Task[] */
 		private $tasks = [];
 
+		/** @var Version|NULL */
+		private $phpVersion;
+
 		/** @var ComposerVersions|NULL */
 		private $composerVersions;
 
@@ -84,6 +87,27 @@
 			}
 
 			return $this->composerVersions;
+		}
+
+
+		public function getPhpVersion(): Version
+		{
+			if ($this->phpVersion === NULL) {
+				throw new \RuntimeException('PhpVersion is missing, use setPhpVersion().');
+			}
+
+			return $this->phpVersion;
+		}
+
+
+		public function setPhpVersion(Version $phpVersion): self
+		{
+			if ($this->phpVersion !== NULL) {
+				throw new \RuntimeException('PhpVersion is already set.');
+			}
+
+			$this->phpVersion = $phpVersion;
+			return $this;
 		}
 
 
