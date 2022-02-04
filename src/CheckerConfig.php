@@ -13,6 +13,9 @@
 		/** @var string|NULL */
 		private $projectDirectory;
 
+		/** @var string|NULL */
+		private $composerFile;
+
 		/** @var string[] */
 		private $paths = [];
 
@@ -46,6 +49,27 @@
 			}
 
 			$this->projectDirectory = $projectDirectory;
+			return $this;
+		}
+
+
+		public function getComposerFile(): string
+		{
+			if ($this->composerFile === NULL) {
+				$this->composerFile = $this->setComposerFile('./composer.json');
+			}
+
+			return $this->composerFile;
+		}
+
+
+		public function setComposerFile(string $composerFile): self
+		{
+			if ($this->composerFile !== NULL) {
+				throw new \RuntimeException('ComposerFile is already set.');
+			}
+
+			$this->composerFile = $this->processPath($composerFile);
 			return $this;
 		}
 
@@ -94,5 +118,15 @@
 		public function addTask(callable $task, string $pattern = NULL): void
 		{
 			$this->tasks[] = new Task($task, $pattern);
+		}
+
+
+		private function processPath(string $path): string
+		{
+			if (\Nette\Utils\FileSystem::isAbsolute($path)) {
+				return \CzProject\PathHelper::absolutizePath($path);
+			}
+
+			return \CzProject\PathHelper::absolutizePath($this->getProjectDirectory() . '/' . $path);
 		}
 	}
