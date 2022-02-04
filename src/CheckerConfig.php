@@ -13,8 +13,11 @@
 		/** @var string|NULL */
 		private $projectDirectory;
 
-		/** @var string|NULL */
+		/** @var ComposerFile|NULL */
 		private $composerFile;
+
+		/** @var string|NULL */
+		private $composerFilePath;
 
 		/** @var string[] */
 		private $paths = [];
@@ -59,10 +62,14 @@
 		}
 
 
-		public function getComposerFile(): string
+		public function getComposerFile(): ComposerFile
 		{
 			if ($this->composerFile === NULL) {
-				$this->composerFile = $this->setComposerFile('./composer.json');
+				$path = $this->composerFilePath !== NULL
+					? $this->composerFilePath
+					: $this->processPath('./composer.json');
+
+				$this->composerFile = ComposerFile::open($path);
 			}
 
 			return $this->composerFile;
@@ -71,11 +78,11 @@
 
 		public function setComposerFile(string $composerFile): self
 		{
-			if ($this->composerFile !== NULL) {
+			if ($this->composerFile !== NULL || $this->composerFilePath !== NULL) {
 				throw new \RuntimeException('ComposerFile is already set.');
 			}
 
-			$this->composerFile = $this->processPath($composerFile);
+			$this->composerFilePath = $this->processPath($composerFile);
 			return $this;
 		}
 
@@ -83,7 +90,7 @@
 		public function getComposerVersions(): ComposerVersions
 		{
 			if ($this->composerVersions === NULL) {
-				$this->composerVersions = ComposerVersions::create($this->getComposerFile());
+				$this->composerVersions = ComposerVersions::create($this->getComposerFile()->getPath());
 			}
 
 			return $this->composerVersions;
