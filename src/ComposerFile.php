@@ -12,10 +12,13 @@
 		/** @var string */
 		private $path;
 
-		/** @var array */
+		/** @var array<string, mixed> */
 		private $data;
 
 
+		/**
+		 * @param array<string, mixed> $data
+		 */
 		public function __construct(string $path, array $data)
 		{
 			$this->path = $path;
@@ -29,12 +32,18 @@
 		}
 
 
+		/**
+		 * @return array<string, string>
+		 */
 		public function getRequire(): array
 		{
 			return Arrays::get($this->data, 'require', []);
 		}
 
 
+		/**
+		 * @return array<string, string>
+		 */
 		public function getRequireDev(): array
 		{
 			return Arrays::get($this->data, 'require-dev', []);

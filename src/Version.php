@@ -75,7 +75,9 @@
 				return new self($version);
 			}
 
-			return new self(\Nette\Utils\Strings::before($version, '.', 3));
+			$version = \Nette\Utils\Strings::before($version, '.', 3);
+			assert($version !== NULL);
+			return new self($version);
 		}
 
 
