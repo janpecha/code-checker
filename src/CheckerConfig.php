@@ -7,6 +7,12 @@
 
 	class CheckerConfig
 	{
+		/** @var string */
+		private $configFile;
+
+		/** @var string|NULL */
+		private $projectDirectory;
+
 		/** @var string[] */
 		private $paths = [];
 
@@ -15,6 +21,33 @@
 
 		/** @var Task[] */
 		private $tasks = [];
+
+
+		public function __construct(string $configFile)
+		{
+			$this->configFile = $configFile;
+		}
+
+
+		public function getProjectDirectory(): string
+		{
+			if ($this->projectDirectory === NULL) {
+				$this->projectDirectory = dirname($this->configFile);
+			}
+
+			return $this->projectDirectory;
+		}
+
+
+		public function setProjectDirectory(string $projectDirectory): self
+		{
+			if ($this->projectDirectory !== NULL) {
+				throw new \RuntimeException('ProjectDirectory is already set.');
+			}
+
+			$this->projectDirectory = $projectDirectory;
+			return $this;
+		}
 
 
 		/**

@@ -26,7 +26,7 @@
 		public static function create(string $configFile): Checker
 		{
 			$configurator = self::loadFile($configFile);
-			$config = new CheckerConfig;
+			$config = new CheckerConfig($configFile);
 			$configurator($config);
 
 			return self::createChecker($config);
