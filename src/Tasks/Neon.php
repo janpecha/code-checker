@@ -20,7 +20,6 @@
 
 		public static function keywordsFixer(string &$contents, Result $result): void
 		{
-			// TODO BUG: nechce nahrazovat druhy pattern v poradi :-/
 			Helpers::findAndReplaces(
 				$contents,
 				$result,

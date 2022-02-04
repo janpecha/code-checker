@@ -5,13 +5,14 @@
 	namespace JP\CodeChecker\Tasks;
 
 	use JP\CodeChecker\CheckerConfig;
-	use JP\CodeChecker\Version;
 
 
 	class Php
 	{
-		public static function configure(CheckerConfig $config, Version $phpVersion): void
+		public static function configure(CheckerConfig $config): void
 		{
+			$phpVersion = $config->getPhpVersion();
+
 			$tasks = \Nette\CodeChecker\Tasks::class;
 			$config->addTask([$tasks, 'phpSyntaxChecker'], '*.php,*.phpt');
 			$config->addTask([$tasks, 'invalidPhpDocChecker'], '*.php,*.phpt');
