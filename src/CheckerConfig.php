@@ -99,6 +99,10 @@
 
 		public function getPhpVersion(): Version
 		{
+			if ($this->phpVersion === NULL) { // autodetect from composer.json => config.platform.php
+				$this->phpVersion = $this->getComposerFile()->getPhpVersion();
+			}
+
 			if ($this->phpVersion === NULL) {
 				throw new \RuntimeException('PhpVersion is missing, use setPhpVersion().');
 			}

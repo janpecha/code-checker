@@ -60,6 +60,25 @@
 		}
 
 
+		public static function fromString(string $version): self
+		{
+			Assert::true((bool) Strings::match($version, '#^(?:0|[1-9]\\d*)(?:\\.(?:0|[1-9]\\d*))*\\z#'), 'Version string is not valid.');
+			$count = substr_count($version, '.');
+
+			if ($count === 0) {
+				return new self($version . '.0.0');
+
+			} elseif ($count === 1) {
+				return new self($version . '.0');
+
+			} elseif ($count === 2) {
+				return new self($version);
+			}
+
+			return new self(\Nette\Utils\Strings::before($version, '.', 3));
+		}
+
+
 		/**
 		 * @param  string $version
 		 * @return bool

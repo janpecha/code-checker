@@ -56,6 +56,13 @@
 		}
 
 
+		public function getPhpVersion(): ?Version
+		{
+			$version = Arrays::get($this->data, ['config', 'platform', 'php'], NULL);
+			return is_string($version) ? Version::fromString($version) : NULL;
+		}
+
+
 		public static function open(string $path): self
 		{
 			$content = \Nette\Utils\FileSystem::read($path);
