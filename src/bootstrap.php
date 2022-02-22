@@ -15,6 +15,8 @@ if (@!include $autoload) {
 	exit(1);
 }
 
+error_reporting(E_ALL & ~E_USER_DEPRECATED & ~E_DEPRECATED);
+
 set_exception_handler(function (\Throwable $e) {
 	echo "Error: {$e->getMessage()} in {$e->getFile()}:{$e->getLine()}\n";
 	die(2);
