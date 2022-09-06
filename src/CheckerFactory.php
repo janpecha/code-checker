@@ -37,6 +37,7 @@
 
 		private static function createChecker(CheckerConfig $config): Checker
 		{
+			$extensions = $config->getExtensions();
 			$paths = $config->getPaths();
 			$tasks = $config->getTasks();
 
@@ -44,15 +45,19 @@
 				throw new \RuntimeException('Missing paths, use method ' . CheckerConfig::class . '::addPath().');
 			}
 
-			if (count($tasks) === 0) {
-				throw new \RuntimeException('Missing tasks, use method ' . CheckerConfig::class . '::addTask().');
+			if (count($tasks) > 0) {
+				$extensions[] = new Extensions\TasksExtension(self::$accept, $tasks);
+			}
+
+			if (count($extensions) === 0) {
+				throw new \RuntimeException('Missing extensions/tasks, use method ' . CheckerConfig::class . '::addExtension() or' . CheckerConfig::class . '::addTask().');
 			}
 
 			$checker = new Checker(
+				$config->getProjectDirectory(),
 				$paths,
-				self::$accept,
 				array_merge(self::$ignore, $config->getIgnore()),
-				$tasks
+				$extensions
 			);
 
 			return $checker;

@@ -25,6 +25,9 @@
 		/** @var string[] */
 		private $ignore = [];
 
+		/** @var Extension[] */
+		private $extensions = [];
+
 		/** @var Task[] */
 		private $tasks = [];
 
@@ -151,6 +154,21 @@
 		{
 			$this->ignore[] = $ignore;
 			return $this;
+		}
+
+
+		public function addExtension(Extension $extension): void
+		{
+			$this->extensions[] = $extension;
+		}
+
+
+		/**
+		 * @return Extension[]
+		 */
+		public function getExtensions(): array
+		{
+			return $this->extensions;
 		}
 
 
