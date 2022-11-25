@@ -6,7 +6,7 @@
 
 	use JP\CodeChecker\CheckerConfig;
 	use JP\CodeChecker\Version;
-	use Nette\CodeChecker\Result;
+	use JP\CodeChecker\Result;
 	use Nette\Utils\Strings;
 
 

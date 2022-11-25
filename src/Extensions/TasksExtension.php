@@ -83,20 +83,20 @@
 					continue;
 				}
 
-				$result = new \Nette\CodeChecker\Result;
+				$result = new \JP\CodeChecker\Result;
 				$contents = $lastContents;
 				$handler($contents, $result);
 
 				foreach ($result->getMessages() as $result) {
 					[$type, $message, $line] = $result;
-					if ($type === \Nette\CodeChecker\Result::ERROR) {
+					if ($type === \JP\CodeChecker\Result::ERROR) {
 						$engine->reportErrorInFile($message, $file, $line);
 						$error = TRUE;
 
-					} elseif ($type === \Nette\CodeChecker\Result::WARNING) {
+					} elseif ($type === \JP\CodeChecker\Result::WARNING) {
 						$engine->reportWarningInFile($message, $file, $line);
 
-					} elseif ($type === \Nette\CodeChecker\Result::FIX) {
+					} elseif ($type === \JP\CodeChecker\Result::FIX) {
 						$engine->reportFixInFile($message, $file, $line);
 						$error = $error || $engine->isReadOnly();
 						$stepByStepFix = $stepByStepFix || $engine->isStepByStep();

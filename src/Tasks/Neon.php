@@ -5,7 +5,7 @@
 	namespace JP\CodeChecker\Tasks;
 
 	use JP\CodeChecker\CheckerConfig;
-	use Nette\CodeChecker\Result;
+	use JP\CodeChecker\Result;
 
 
 	class Neon

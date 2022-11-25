@@ -4,7 +4,7 @@
 
 	namespace JP\CodeChecker\Tasks;
 
-	use Nette\CodeChecker\Result;
+	use JP\CodeChecker\Result;
 	use Nette\Utils\Strings;
 
 

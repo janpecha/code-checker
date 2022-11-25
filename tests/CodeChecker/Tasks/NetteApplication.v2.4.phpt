@@ -1,7 +1,7 @@
 <?php
 
 use JP\CodeChecker\Tasks;
-use Nette\CodeChecker\Result;
+use JP\CodeChecker\Result;
 use Tester\Assert;
 
 require __DIR__ . '/../../bootstrap.php';
