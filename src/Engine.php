@@ -117,16 +117,20 @@
 		 */
 		public function findFiles($masks): \AppendIterator
 		{
+			if (!is_array($masks)) {
+				$masks = [$masks];
+			}
+
 			$iterator = new \AppendIterator;
 
 			foreach ($this->paths as $path) {
 				$iterator->append(
 					is_file($path)
 					? new \ArrayIterator([$path])
-					: \Nette\Utils\Finder::findFiles($masks)
-						->exclude($this->ignore)
+					: \Nette\Utils\Finder::findFiles(...$masks)
+						->exclude(...$this->ignore)
 						->from($path)
-						->exclude($this->ignore)
+						->exclude(...$this->ignore)
 						->getIterator()
 				);
 			}
