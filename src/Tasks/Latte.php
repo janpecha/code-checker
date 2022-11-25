@@ -60,7 +60,7 @@
 				$result->error('Latte: template contains <?php open tag (deprecated in v2.4)');
 			}
 
-			if (Strings::contains($contents, '$template')) {
+			if (Strings::contains($contents, '$template->') || Strings::contains($contents, '$template::') || Strings::contains($contents, '$template[')) {
 				$result->warning('Latte: uses deprecated variable $template (deprecated in v2.4)');
 			}
 
