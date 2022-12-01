@@ -12,6 +12,7 @@
 		public static function configure(CheckerConfig $config): void
 		{
 			$phpVersion = $config->getPhpVersion();
+			$params = $config->getParameters();
 
 			$tasks = \Nette\CodeChecker\Tasks::class;
 			$config->addTask([$tasks, 'phpSyntaxChecker'], '*.php,*.phpt');
@@ -25,7 +26,7 @@
 				$config->addTask([$tasks, 'shortArraySyntaxFixer'], '*.php,*.phpt');
 			}
 
-			if ($phpVersion->isEqualOrGreater('7.2.0')) {
+			if ($phpVersion->isEqualOrGreater('7.2.0') && $params->toBool('php.strictTypes', TRUE)) {
 				$config->addTask([$tasks, 'strictTypesDeclarationChecker'], '*.php,*.phpt');
 			}
 		}
