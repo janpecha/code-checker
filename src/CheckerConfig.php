@@ -31,6 +31,9 @@
 		/** @var Task[] */
 		private $tasks = [];
 
+		/** @var Parameters|NULL */
+		private $parameters;
+
 		/** @var Version|NULL */
 		private $phpVersion;
 
@@ -122,6 +125,30 @@
 
 			$this->phpVersion = $phpVersion;
 			return $this;
+		}
+
+
+		/**
+		 * @param array<string, mixed> $parameters
+		 */
+		public function setParameters(array $parameters): self
+		{
+			if ($this->parameters !== NULL) {
+				throw new \RuntimeException('Parameters are already set.');
+			}
+
+			$this->parameters = new Parameters($parameters);
+			return $this;
+		}
+
+
+		public function getParameters(): Parameters
+		{
+			if ($this->parameters === NULL) {
+				$this->parameters = new Parameters([]);
+			}
+
+			return $this->parameters;
 		}
 
 
