@@ -61,6 +61,7 @@
 				echo "Running in read-only mode\n";
 			}
 
+			echo "Project directory: {$console->color('white', $this->projectDirectory)}\n";
 			echo "Scanning {$console->color('white', implode(', ', $this->paths))}\n";
 			$success = TRUE;
 
