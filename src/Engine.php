@@ -5,6 +5,7 @@
 	namespace JP\CodeChecker;
 
 	use Nette\Utils\FileSystem;
+	use Nette\Utils\Strings;
 
 
 	class Engine
@@ -146,13 +147,19 @@
 
 
 		private function write(
-			string $relativePath,
+			string $file,
 			string $type,
 			string $message,
 			?int $line,
 			string $color
 		): void
 		{
+			$relativePath = $file;
+
+			if (Strings::startsWith($file, $this->projectDirectory)) {
+				$relativePath = Strings::substring($file, Strings::length($this->projectDirectory));
+			}
+
 			$base = basename($relativePath);
 			echo $this->console->color($color, str_pad("[$type]", 10)),
 				$base === $relativePath ? '' : $this->console->color('silver', dirname($relativePath) . DIRECTORY_SEPARATOR),
