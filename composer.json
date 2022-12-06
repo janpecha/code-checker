@@ -13,7 +13,8 @@
 		"php": ">=7.2.0",
 		"nette/code-checker": "^3.2",
 		"czproject/assert": "^1.4",
-		"czproject/path-helper": "^4.1"
+		"czproject/path-helper": "^4.1",
+		"czproject/git-php": "^4.0"
 	},
 	"require-dev": {
 		"nette/tester": "^2.4"

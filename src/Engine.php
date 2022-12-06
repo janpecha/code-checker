@@ -31,6 +31,9 @@
 		/** @var \Nette\CommandLine\Console */
 		private $console;
 
+		/** @var \CzProject\GitPhp\GitRepository|NULL */
+		private $gitRepository;
+
 
 		/**
 		 * @param  string[] $paths
@@ -43,7 +46,8 @@
 			bool $readOnly,
 			bool $stepByStep,
 			ProgressBar $progressBar,
-			\Nette\CommandLine\Console $console
+			\Nette\CommandLine\Console $console,
+			?\CzProject\GitPhp\GitRepository $gitRepository = NULL
 		)
 		{
 			$this->projectDirectory = $projectDirectory;
@@ -53,6 +57,7 @@
 			$this->stepByStep = $stepByStep;
 			$this->progressBar = $progressBar;
 			$this->console = $console;
+			$this->gitRepository = $gitRepository;
 		}
 
 
@@ -107,7 +112,12 @@
 		public function writeFile(string $path, string $content): void
 		{
 			if (!$this->readOnly) {
-				FileSystem::write($this->path($path), $content);
+				$fullPath = $this->path($path);
+				FileSystem::write($fullPath, $content);
+
+				if ($this->gitRepository !== NULL) {
+					$this->gitRepository->addFile($fullPath);
+				}
 			}
 		}
 
@@ -137,6 +147,21 @@
 			}
 
 			return $iterator;
+		}
+
+
+		public function commit(string $message): void
+		{
+			if ($this->gitRepository !== NULL) {
+				if ($this->readOnly) {
+					echo $this->console->color('fuchsia', 'GIT commit (DRY RUN): ' . $message), "\n";
+
+				} elseif ($this->gitRepository->hasChanges()) {
+					echo $this->console->color('fuchsia', 'GIT commit: ' . $message), "\n";
+					$this->gitRepository->execute('add', '--update'); // only updated items
+					$this->gitRepository->commit($message);
+				}
+			}
 		}
 
 

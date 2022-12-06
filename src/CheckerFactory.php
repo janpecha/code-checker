@@ -57,7 +57,8 @@
 				$config->getProjectDirectory(),
 				$paths,
 				array_merge(self::$ignore, $config->getIgnore()),
-				$extensions
+				$extensions,
+				new \CzProject\GitPhp\Git
 			);
 
 			return $checker;

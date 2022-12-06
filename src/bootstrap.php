@@ -58,6 +58,7 @@ Options:
     -f | --fix            Fixes files
     --no-progress         Do not show progress dots
     --step-by-step        Stops on change or report
+    --git                 Enables GIT support (auto commit of changes)
 
 
 XX
@@ -99,7 +100,8 @@ $checkerRunner = CheckerFactory::create($options['-c']);
 $ok = $checkerRunner->run(
 	!isset($options['--fix']),
 	isset($options['--step-by-step']),
-	!isset($options['--no-progress'])
+	!isset($options['--no-progress']),
+	isset($options['--git'])
 );
 
 exit($ok ? 0 : 1);
