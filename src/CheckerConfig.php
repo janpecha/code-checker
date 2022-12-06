@@ -63,7 +63,7 @@
 				throw new \RuntimeException('ProjectDirectory is already set.');
 			}
 
-			$this->projectDirectory = $projectDirectory;
+			$this->projectDirectory = \CzProject\PathHelper::absolutizePath($projectDirectory);
 			return $this;
 		}
 
