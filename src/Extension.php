@@ -7,5 +7,5 @@
 
 	interface Extension
 	{
-		function run(Engine $engine): bool;
+		function run(Engine $engine): void;
 	}

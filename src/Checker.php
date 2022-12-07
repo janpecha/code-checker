@@ -80,7 +80,8 @@
 			$success = TRUE;
 
 			foreach ($this->extensions as $extension) {
-				$success = $extension->run($engine) && $success;
+				$extension->run($engine);
+				$success = $engine->isSuccess() && $success;
 				$progressBar->reset();
 
 				if ($gitRepository !== NULL && $gitRepository->hasChanges()) {

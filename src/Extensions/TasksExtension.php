@@ -32,19 +32,17 @@
 		}
 
 
-		public function run(Engine $engine): bool
+		public function run(Engine $engine): void
 		{
-			$success = TRUE;
-
 			if ($engine->isStepByStep()) {
 				foreach ($this->tasks as $task) {
 					foreach ($engine->findFiles($this->acceptMasks) as $file) {
 						$engine->progress();
 						$file = (string) $file;
-						$success = $this->processFile([$task], $file, $engine) && $success;
+						$this->processFile([$task], $file, $engine);
 					}
 
-					if (!$success) {
+					if (!$engine->isSuccess()) {
 						break;
 					}
 				}
@@ -54,11 +52,9 @@
 					$engine->progress();
 
 					$file = (string) $file;
-					$success = $this->processFile($this->tasks, $file, $engine) && $success;
+					$this->processFile($this->tasks, $file, $engine);
 				}
 			}
-
-			return $success;
 		}
 
 
@@ -69,10 +65,8 @@
 			array $tasks,
 			string $file,
 			Engine $engine
-		): bool
+		): void
 		{
-			$error = FALSE;
-			$stepByStepFix = FALSE;
 			$origContents = $lastContents = file_get_contents($file);
 
 			foreach ($tasks as $task) {
@@ -91,19 +85,16 @@
 					[$type, $message, $line] = $result;
 					if ($type === \JP\CodeChecker\Result::ERROR) {
 						$engine->reportErrorInFile($message, $file, $line);
-						$error = TRUE;
 
 					} elseif ($type === \JP\CodeChecker\Result::WARNING) {
 						$engine->reportWarningInFile($message, $file, $line);
 
 					} elseif ($type === \JP\CodeChecker\Result::FIX) {
 						$engine->reportFixInFile($message, $file, $line);
-						$error = $error || $engine->isReadOnly();
-						$stepByStepFix = $stepByStepFix || $engine->isStepByStep();
 					}
 				}
 
-				if (!$error) {
+				if (!$engine->isError()) {
 					$lastContents = $contents;
 				}
 			}
@@ -111,8 +102,6 @@
 			if ($lastContents !== $origContents && !$engine->isReadOnly()) {
 				file_put_contents($file, $lastContents);
 			}
-
-			return !$error && !$stepByStepFix;
 		}
 
 

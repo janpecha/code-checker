@@ -34,6 +34,12 @@
 		/** @var \CzProject\GitPhp\GitRepository|NULL */
 		private $gitRepository;
 
+		/** @var bool */
+		private $error = FALSE;
+
+		/** @var bool */
+		private $stepByStepFix = FALSE;
+
 
 		/**
 		 * @param  string[] $paths
@@ -61,6 +67,18 @@
 		}
 
 
+		public function isSuccess(): bool
+		{
+			return !$this->error && !$this->stepByStepFix;
+		}
+
+
+		public function isError(): bool
+		{
+			return $this->error;
+		}
+
+
 		public function isReadOnly(): bool
 		{
 			return $this->readOnly;
@@ -82,6 +100,7 @@
 		public function reportErrorInFile(string $message, string $file, ?int $line = NULL): void
 		{
 			$this->write($file, 'ERROR', $message, $line, 'red');
+			$this->error = TRUE;
 		}
 
 
@@ -94,6 +113,8 @@
 		public function reportFixInFile(string $message, string $file, ?int $line = NULL): void
 		{
 			$this->write($file, $this->readOnly ? 'FOUND' : 'FIX', $message, $line, 'aqua');
+			$this->error = $this->error || $this->readOnly; // error or FOUND
+			$this->stepByStepFix = $this->stepByStepFix || $this->stepByStep;
 		}
 
 
