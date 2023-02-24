@@ -158,6 +158,19 @@
 		}
 
 
+		public function deleteFile(string $path): void
+		{
+			if (!$this->readOnly) {
+				$fullPath = $this->path($path);
+				FileSystem::delete($fullPath);
+
+				if ($this->gitRepository !== NULL) {
+					$this->gitRepository->removeFile($fullPath);
+				}
+			}
+		}
+
+
 		/**
 		 * @param  string|string[] $masks
 		 * @return \AppendIterator<\SplFileInfo>
