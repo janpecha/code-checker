@@ -190,10 +190,10 @@
 		{
 			if ($this->gitRepository !== NULL) {
 				if ($this->readOnly) {
-					echo $this->console->color('fuchsia', 'GIT commit (DRY RUN): ' . $message), "\n";
+					echo $this->console->color('fuchsia', '[COMMIT (DRY RUN)] ' . $message), "\n";
 
 				} elseif ($this->gitRepository->hasChanges()) {
-					echo $this->console->color('fuchsia', 'GIT commit: ' . $message), "\n";
+					echo $this->console->color('fuchsia', str_pad('[COMMIT]', 10) . $message), "\n";
 					$this->gitRepository->execute('add', '--update'); // only updated items
 					$this->gitRepository->commit($message);
 				}
