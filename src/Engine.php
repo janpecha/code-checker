@@ -192,7 +192,7 @@
 				if ($this->readOnly) {
 					echo $this->console->color('fuchsia', '[COMMIT (DRY RUN)] ' . $message), "\n";
 
-				} elseif ($this->gitRepository->hasChanges()) {
+				} elseif ($this->hasGitTrackedChanges()) {
 					echo $this->console->color('fuchsia', str_pad('[COMMIT]', 10) . $message), "\n";
 					$this->gitRepository->execute('add', '--update'); // only updated items
 					$this->gitRepository->commit($message);
@@ -226,5 +226,17 @@
 				$base === $relativePath ? '' : $this->console->color('silver', dirname($relativePath) . DIRECTORY_SEPARATOR),
 				$this->console->color('white', $base . ($line ? ':' . $line : '')), '    ',
 				$this->console->color($color, $message), "\n";
+		}
+
+
+		private function hasGitTrackedChanges(): bool
+		{
+			if ($this->gitRepository === NULL) {
+				return FALSE;
+			}
+
+			$this->gitRepository->execute('update-index', '-q', '--refresh');
+			$output = $this->gitRepository->execute('status', '--porcelain', '--untracked-files=no');
+			return count($output) > 0;
 		}
 	}
