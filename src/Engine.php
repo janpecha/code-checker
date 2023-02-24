@@ -143,6 +143,21 @@
 		}
 
 
+		public function renameFile(string $old, string $new): void
+		{
+			if (!$this->readOnly) {
+				$oldPath = $this->path($old);
+				$newPath = $this->path($new);
+				FileSystem::rename($oldPath, $newPath);
+
+				if ($this->gitRepository !== NULL) {
+					$this->gitRepository->removeFile($oldPath);
+					$this->gitRepository->addFile($newPath);
+				}
+			}
+		}
+
+
 		/**
 		 * @param  string|string[] $masks
 		 * @return \AppendIterator<\SplFileInfo>
