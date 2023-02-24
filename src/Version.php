@@ -60,6 +60,12 @@
 		}
 
 
+		public function toMinorString(): string
+		{
+			return (string) Strings::before($this->version, '.', 2);
+		}
+
+
 		public static function fromString(string $version): self
 		{
 			Assert::true((bool) Strings::match($version, '#^(?:0|[1-9]\\d*)(?:\\.(?:0|[1-9]\\d*))*\\z#'), 'Version string is not valid.');

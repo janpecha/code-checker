@@ -16,6 +16,8 @@ test('Valid version', function () {
 	Assert::true($v1->isEqualOrGreater('2.4.2'));
 	Assert::false($v1->isEqualOrGreater('2.4.3'));
 	Assert::true($v1->isEqualOrGreater('2.4.0'));
+
+	Assert::same('2.4', $v1->toMinorString());
 });
 
 
