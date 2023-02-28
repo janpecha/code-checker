@@ -9,6 +9,9 @@
 	use JP\CodeChecker\Result;
 
 
+	/**
+	 * @deprecated Use JP\CodeChecker\Extensions\NetteApplicationExtension
+	 */
 	class NetteApplication
 	{
 		public static function configure(CheckerConfig $config, Version $version): void

@@ -17,7 +17,7 @@
 			$composerVersions = $config->getComposerVersions();
 
 			if ($composerVersions->hasPackage('nette/application')) {
-				Tasks\NetteApplication::configure($config, $composerVersions->getVersion('nette/application'));
+				Extensions\NetteApplicationExtension::configure($config, $composerVersions->getVersion('nette/application'));
 			}
 
 			if ($composerVersions->hasPackage('nette/utils')) {
