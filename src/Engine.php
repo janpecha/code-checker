@@ -97,20 +97,29 @@
 		}
 
 
-		public function reportErrorInFile(string $message, string $file, ?int $line = NULL): void
+		/**
+		 * @param  string|\SplFileInfo $file
+		 */
+		public function reportErrorInFile(string $message, $file, ?int $line = NULL): void
 		{
 			$this->write($file, 'ERROR', $message, $line, 'red');
 			$this->error = TRUE;
 		}
 
 
-		public function reportWarningInFile(string $message, string $file, ?int $line = NULL): void
+		/**
+		 * @param  string|\SplFileInfo $file
+		 */
+		public function reportWarningInFile(string $message, $file, ?int $line = NULL): void
 		{
 			$this->write($file, 'WARNING', $message, $line, 'yellow');
 		}
 
 
-		public function reportFixInFile(string $message, string $file, ?int $line = NULL): void
+		/**
+		 * @param  string|\SplFileInfo $file
+		 */
+		public function reportFixInFile(string $message, $file, ?int $line = NULL): void
 		{
 			$this->write($file, $this->readOnly ? 'FOUND' : 'FIX', $message, $line, 'aqua');
 			$this->error = $this->error || $this->readOnly; // error or FOUND
@@ -118,19 +127,28 @@
 		}
 
 
-		public function existsFile(string $path): bool
+		/**
+		 * @param  string|\SplFileInfo $path
+		 */
+		public function existsFile($path): bool
 		{
 			return is_file($this->path($path));
 		}
 
 
-		public function readFile(string $path): string
+		/**
+		 * @param  string|\SplFileInfo $path
+		 */
+		public function readFile($path): string
 		{
 			return FileSystem::read($this->path($path));
 		}
 
 
-		public function writeFile(string $path, string $content): void
+		/**
+		 * @param  string|\SplFileInfo $path
+		 */
+		public function writeFile($path, string $content): void
 		{
 			if (!$this->readOnly) {
 				$fullPath = $this->path($path);
@@ -143,7 +161,11 @@
 		}
 
 
-		public function renameFile(string $old, string $new): void
+		/**
+		 * @param  string|\SplFileInfo $old
+		 * @param  string|\SplFileInfo $new
+		 */
+		public function renameFile($old, $new): void
 		{
 			if (!$this->readOnly) {
 				$oldPath = $this->path($old);
@@ -158,7 +180,10 @@
 		}
 
 
-		public function deleteFile(string $path): void
+		/**
+		 * @param  string|\SplFileInfo $path
+		 */
+		public function deleteFile($path): void
 		{
 			if (!$this->readOnly) {
 				$fullPath = $this->path($path);
@@ -214,20 +239,34 @@
 		}
 
 
-		private function path(string $path): string
+		/**
+		 * @param  string|\SplFileInfo $path
+		 */
+		private function path($path): string
 		{
+			if ($path instanceof \SplFileInfo) {
+				return $path->getRealPath();
+			}
+
 			return $this->projectDirectory . '/' . $path;
 		}
 
 
+		/**
+		 * @param  string|\SplFileInfo $file
+		 */
 		private function write(
-			string $file,
+			$file,
 			string $type,
 			string $message,
 			?int $line,
 			string $color
 		): void
 		{
+			if ($file instanceof \SplFileInfo) {
+				$file = $file->getRealPath();
+			}
+
 			$relativePath = $file;
 
 			if (Strings::startsWith($file, $this->projectDirectory)) {
