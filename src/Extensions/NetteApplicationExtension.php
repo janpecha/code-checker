@@ -80,7 +80,7 @@
 		public static function configure(
 			CheckerConfig $config,
 			Version $version,
-			$fileMask = '*.php'
+			$fileMask = '*Presenter.php'
 		)
 		{
 			$config->addExtension(new self($version, $fileMask));
