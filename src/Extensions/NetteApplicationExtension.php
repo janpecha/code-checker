@@ -8,6 +8,8 @@
 	use JP\CodeChecker\Engine;
 	use JP\CodeChecker\Extension;
 	use JP\CodeChecker\Version;
+	use JP\CodeChecker\Utils\PhpReflection;
+	use Nette\Utils\Strings;
 
 
 	class NetteApplicationExtension implements Extension
@@ -37,6 +39,7 @@
 			$files = $engine->findFiles($this->fileMask);
 
 			$this->fixHttpMethodsInPresenters($engine, $files);
+			$this->fixPresenterMethodsVisibility($engine, $files);
 		}
 
 
@@ -69,6 +72,63 @@
 
 			if ($wasChanged) {
 				$engine->commit('Nette: replaced deprecated method isPost() by isMethod(\'POST\')');
+			}
+		}
+
+
+		/**
+		 * @param  iterable<string|\SplFileInfo> $files
+		 */
+		private function fixPresenterMethodsVisibility(Engine $engine, iterable $files): void
+		{
+			$wasChanged = FALSE;
+			$filesReflection = PhpReflection::scanFiles($files);
+
+			foreach ($filesReflection->getClasses() as $phpClass) {
+				if (!$filesReflection->isSubclassOf($phpClass, \Nette\Application\UI\Presenter::class)) {
+					continue;
+				}
+
+				foreach ($phpClass->getMethods() as $classMethod) {
+					$methodFixed = FALSE;
+					$methodName = Strings::lower($classMethod->getName());
+
+					if ($methodName !== 'action' && Strings::startsWith($methodName, 'action') && !$classMethod->isPublic()) {
+						$classMethod->setVisibilityToPublic();
+						$methodFixed = TRUE;
+
+					} elseif ($methodName !== 'render' && Strings::startsWith($methodName, 'render') && !$classMethod->isPublic()) {
+						$classMethod->setVisibilityToPublic();
+						$methodFixed = TRUE;
+
+					} elseif ($methodName !== 'handle' && Strings::startsWith($methodName, 'handle') && !$classMethod->isPublic()) {
+						$classMethod->setVisibilityToPublic();
+						$methodFixed = TRUE;
+
+					} elseif (($methodName === 'startup'
+						|| $methodName === 'beforerender'
+						|| $methodName === 'afterrender'
+						|| $methodName === 'shutdown'
+						) && !$classMethod->isProtected()
+					) {
+						$classMethod->setVisibilityToProtected();
+						$methodFixed = TRUE;
+
+					} elseif ($methodName !== 'createcomponent' && Strings::startsWith($methodName, 'createcomponent') && !$classMethod->isProtected()) {
+						$classMethod->setVisibilityToProtected();
+						$methodFixed = TRUE;
+					}
+
+					if ($methodFixed) {
+						$wasChanged = TRUE;
+						$engine->reportFixInFile('Nette: fixed visibility of ' . $classMethod->getFullName() . '()', $phpClass->getFileName());
+					}
+				}
+			}
+
+			if ($wasChanged) {
+				PhpReflection::saveFiles($engine, $filesReflection);
+				$engine->commit('Nette: fixed visibilities of presenters methods');
 			}
 		}
 
