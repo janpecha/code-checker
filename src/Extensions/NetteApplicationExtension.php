@@ -8,6 +8,7 @@
 	use JP\CodeChecker\Engine;
 	use JP\CodeChecker\Extension;
 	use JP\CodeChecker\Version;
+	use JP\CodeChecker\Utils\PhpDoc;
 	use JP\CodeChecker\Utils\PhpReflection;
 	use Nette\Utils\Strings;
 
@@ -40,6 +41,7 @@
 
 			$this->fixHttpMethodsInPresenters($engine, $files);
 			$this->fixPresenterMethodsVisibility($engine, $files);
+			$this->fixPresenterMethodsPhpDocReturnType($engine, $files);
 		}
 
 
@@ -129,6 +131,100 @@
 			if ($wasChanged) {
 				PhpReflection::saveFiles($engine, $filesReflection);
 				$engine->commit('Nette: fixed visibilities of presenters methods');
+			}
+		}
+
+
+		/**
+		 * @param  iterable<string|\SplFileInfo> $files
+		 */
+		private function fixPresenterMethodsPhpDocReturnType(Engine $engine, iterable $files): void
+		{
+			$wasChanged = FALSE;
+			$filesReflection = PhpReflection::scanFiles($files);
+			$phpDocParser = NULL;
+
+			foreach ($filesReflection->getClasses() as $phpClass) {
+				if (!$filesReflection->isSubclassOf($phpClass, \Nette\Application\UI\Presenter::class)) {
+					continue;
+				}
+
+				foreach ($phpClass->getMethods() as $classMethod) {
+					$methodName = Strings::lower($classMethod->getName());
+					$actionType = NULL;
+
+					if ($methodName !== 'action' && Strings::startsWith($methodName, 'action')) {
+						$actionType = 'add-void';
+
+					} elseif ($methodName !== 'render' && Strings::startsWith($methodName, 'render')) {
+						$actionType = 'add-void';
+
+					} elseif ($methodName !== 'handle' && Strings::startsWith($methodName, 'handle')) {
+						$actionType = 'add-void';
+
+					} elseif ($methodName === 'startup'
+						|| $methodName === 'beforerender'
+						|| $methodName === 'afterrender'
+						|| $methodName === 'shutdown'
+					) {
+						$actionType = 'remove-void';
+					}
+
+					$methodFixed = FALSE;
+
+					if ($actionType !== NULL && !$classMethod->hasReturnType()) {
+						$phpDocParser = $phpDocParser ?? \CzProject\PhpSimpleAst\Utils\PhpDocParser::getInstance();
+						$docComment = $classMethod->getDocComment();
+
+						if ($actionType === 'add-void') {
+							if ($docComment === NULL) {
+								$classMethod->setDocComment("/**\n * @return void\n */");
+								$methodFixed = TRUE;
+
+							} else {
+								$phpDoc = $phpDocParser->parse($docComment);
+
+								if (!PhpDoc::hasTag($phpDoc, '@return')) {
+									PhpDoc::addReturnTag($phpDoc, 'void');
+									$methodFixed = TRUE;
+									$classMethod->setDocComment((string) $phpDoc);
+								}
+							}
+
+							if ($methodFixed) {
+								$engine->reportFixInFile('Nette: added return type for ' . $classMethod->getFullName() . '()', $phpClass->getFileName());
+							}
+
+						} elseif ($actionType === 'remove-void') {
+							if ($docComment === NULL) {
+								continue;
+							}
+
+							$phpDoc = $phpDocParser->parse($docComment);
+
+							foreach ($phpDoc->getTagsByName('@return') as $returnTag) {
+								if ($returnTag->value->type === 'void') {
+									PhpDoc::removeTag($phpDoc, $returnTag);
+									$classMethod->setDocComment((string) $phpDoc);
+									$methodFixed = TRUE;
+									$engine->reportFixInFile('Nette: removed return type from ' . $classMethod->getFullName() . '()', $phpClass->getFileName());
+								}
+							}
+
+						} else {
+							throw new \RuntimeException("Unknow actionType '$actionType'.");
+						}
+					}
+
+					if ($methodFixed) {
+						$wasChanged = TRUE;
+					}
+				}
+			}
+
+			if ($wasChanged) {
+				PhpReflection::saveFiles($engine, $filesReflection);
+				$engine->commit('Nette: fixed return types of presenters methods');
 			}
 		}
 
