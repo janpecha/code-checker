@@ -21,7 +21,7 @@
 			}
 
 			if ($composerVersions->hasPackage('nette/utils')) {
-				Tasks\NetteUtils::configure($config, $composerVersions->getVersion('nette/utils'));
+				Extensions\NetteUtilsExtension::configure($config, $composerVersions->getVersion('nette/utils'));
 			}
 
 			if ($composerVersions->hasPackage('nette/neon')) {
