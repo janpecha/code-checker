@@ -77,6 +77,20 @@
 					$engine,
 					'Latte: tag {? expr} replaced by tag {php} (deprecated in v2.4)'
 				);
+
+				$contents->findAndReplace(
+					'#{php\\s+break}#m',
+					'{breakIf TRUE}',
+					$engine,
+					'Latte: keyword \'break\' is not supported in {php} (removed in v3.0)'
+				);
+
+				$contents->findAndReplace(
+					'#({var\\s+)(\\$[a-zA-Z0-9]+)(\\s+)\\+=(\\s+)#m',
+					'$1$2$3=$4$2 + ',
+					$engine,
+					'Latte: operation += is not supported in {var} (removed in v3.0)'
+				);
 			}
 		}
 
