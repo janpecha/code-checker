@@ -11,6 +11,6 @@
 	{
 		public static function configure(CheckerConfig $config): void
 		{
-			\JP\CodeChecker\Tasks\AutoConfig::configure($config);
+			\JP\CodeChecker\AutoConfig::configure($config);
 		}
 	}
