@@ -29,7 +29,7 @@
 			}
 
 			if ($composerVersions->hasPackage('latte/latte')) {
-				Tasks\Latte::configure($config, $composerVersions->getVersion('latte/latte'));
+				Extensions\LatteExtension::configure($config, $composerVersions->getVersion('latte/latte'));
 			}
 		}
 	}
