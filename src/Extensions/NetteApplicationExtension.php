@@ -84,9 +84,11 @@
 		private function fixPresenterMethodsVisibility(Engine $engine, iterable $files): void
 		{
 			$wasChanged = FALSE;
-			$filesReflection = PhpReflection::scanFiles($files);
+			$filesReflection = PhpReflection::scanFiles($files, $engine->progressHandler());
 
 			foreach ($filesReflection->getClasses() as $phpClass) {
+				$engine->progress();
+
 				if (!$filesReflection->isSubclassOf($phpClass, \Nette\Application\UI\Presenter::class)) {
 					continue;
 				}
@@ -141,10 +143,12 @@
 		private function fixPresenterMethodsPhpDocReturnType(Engine $engine, iterable $files): void
 		{
 			$wasChanged = FALSE;
-			$filesReflection = PhpReflection::scanFiles($files);
+			$filesReflection = PhpReflection::scanFiles($files, $engine->progressHandler());
 			$phpDocParser = NULL;
 
 			foreach ($filesReflection->getClasses() as $phpClass) {
+				$engine->progress();
+
 				if (!$filesReflection->isSubclassOf($phpClass, \Nette\Application\UI\Presenter::class)) {
 					continue;
 				}

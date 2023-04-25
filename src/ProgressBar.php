@@ -16,6 +16,9 @@
 		/** @var int */
 		private $counter = 0;
 
+		/** @var callable|NULL */
+		private $handler;
+
 
 		public function __construct(bool $showProgress)
 		{
@@ -30,6 +33,19 @@
 				$this->wasPrinted = TRUE;
 			}
 		}
+
+
+		public function progressHandler(): callable
+		{
+			if ($this->handler === NULL) {
+				$this->handler = function () {
+					$this->progress();
+				};
+			}
+
+			return $this->handler;
+		}
+
 
 		public function reset(): void
 		{

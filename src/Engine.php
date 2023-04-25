@@ -97,6 +97,12 @@
 		}
 
 
+		public function progressHandler(): callable
+		{
+			return $this->progressBar->progressHandler();
+		}
+
+
 		/**
 		 * @param  string|\SplFileInfo $file
 		 */
