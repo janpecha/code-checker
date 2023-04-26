@@ -41,38 +41,16 @@
 		{
 			$files = $engine->findFiles($this->fileMask);
 
-			$this->processHttpMethodsInPresenters($engine, $files);
+			if ($this->version->isEqualOrGreater('2.4.0')) {
+				$engine->processFiles(
+					$files,
+					[$this, 'fixHttpMethodsInPresenters'],
+					'Nette: replaced deprecated method isPost() by isMethod(\'POST\')'
+				);
+			}
+
 			$this->fixPresenterMethodsVisibility($engine, $files);
 			$this->fixPresenterMethodsPhpDocReturnType($engine, $files);
-		}
-
-
-		/**
-		 * @param  iterable<string|\SplFileInfo> $files
-		 */
-		private function processHttpMethodsInPresenters(Engine $engine, iterable $files): void
-		{
-			if (!$this->version->isEqualOrGreater('2.4.0')) {
-				return;
-			}
-
-			$wasChanged = FALSE;
-
-			foreach ($files as $file) {
-				$engine->progress();
-				$content = new FileContent($file, $engine->readFile($file));
-
-				$this->fixHttpMethodsInPresenters($content, $engine);
-
-				if ($content->wasChanged()) {
-					$engine->writeFile($file, (string) $content);
-					$wasChanged = TRUE;
-				}
-			}
-
-			if ($wasChanged) {
-				$engine->commit('Nette: replaced deprecated method isPost() by isMethod(\'POST\')');
-			}
 		}
 
 

@@ -41,24 +41,15 @@
 			}
 
 			$files = $engine->findFiles($this->fileMask);
-			$wasChanged = FALSE;
 
-			foreach ($files as $file) {
-				$engine->progress();
-				$content = new FileContent($file, $engine->readFile($file));
-
-				$this->fixDeprecated($content, $engine);
-				$this->checkDeprecated($content, $engine);
-
-				if ($content->wasChanged()) {
-					$engine->writeFile($file, (string) $content);
-					$wasChanged = TRUE;
-				}
-			}
-
-			if ($wasChanged) {
-				$engine->commit('Latte: replaced deprecated stuff');
-			}
+			$engine->processFiles(
+				$files,
+				function (FileContent $contents, Reporter $reporter) {
+					$this->fixDeprecated($contents, $reporter);
+					$this->checkDeprecated($contents, $reporter);
+				},
+				'Latte: replaced deprecated stuff'
+			);
 		}
 
 

@@ -221,6 +221,36 @@
 		}
 
 
+		/**
+		 * @param  iterable<string|\SplFileInfo> $files
+		 * @param  callable(FileContent, Reporter): void $processor
+		 */
+		public function processFiles(
+			iterable $files,
+			callable $processor,
+			?string $commitMessage = NULL
+		): void
+		{
+			$wasChanged = FALSE;
+
+			foreach ($files as $file) {
+				$this->progress();
+				$content = new FileContent($file, $this->readFile($file));
+
+				$processor($content, $this);
+
+				if ($content->wasChanged()) {
+					$this->writeFile($file, (string) $content);
+					$wasChanged = TRUE;
+				}
+			}
+
+			if ($wasChanged && $commitMessage !== NULL) {
+				$this->commit($commitMessage);
+			}
+		}
+
+
 		public function commit(string $message): void
 		{
 			if ($this->gitRepository !== NULL) {

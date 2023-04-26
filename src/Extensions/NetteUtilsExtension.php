@@ -36,24 +36,13 @@
 
 		public function run(Engine $engine): void
 		{
-			$wasChanged = FALSE;
 			$files = $engine->findFiles($this->fileMask);
 
-			foreach ($files as $file) {
-				$engine->progress();
-				$content = new FileContent($file, $engine->readFile($file));
-
-				$this->fixNetteObjectUsage($content, $engine);
-
-				if ($content->wasChanged()) {
-					$engine->writeFile($file, (string) $content);
-					$wasChanged = TRUE;
-				}
-			}
-
-			if ($wasChanged) {
-				$engine->commit('Nette: replaced deprecated Nette\\Object by Nette\\SmartObject');
-			}
+			$engine->processFiles(
+				$files,
+				[$this, 'fixNetteObjectUsage'],
+				'Nette: replaced deprecated Nette\\Object by Nette\\SmartObject'
+			);
 		}
 
 
