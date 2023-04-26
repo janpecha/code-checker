@@ -58,8 +58,9 @@
 			string $reportMessage = NULL
 		): bool
 		{
-			$this->contents = Strings::replace($this->contents, $pattern, $replacement);
-			$wasChanged = $this->contents !== $this->originalContents;
+			$newContents = Strings::replace($this->contents, $pattern, $replacement);
+			$wasChanged = $this->contents !== $newContents;
+			$this->contents = $newContents;
 
 			if ($wasChanged && $reporter !== NULL && $reportMessage !== NULL) {
 				$reporter->reportFixInFile($reportMessage, $this->file);
