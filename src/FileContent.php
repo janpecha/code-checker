@@ -54,15 +54,15 @@
 		public function findAndReplace(
 			string $pattern,
 			string $replacement,
-			Engine $engine = NULL,
+			Reporter $reporter = NULL,
 			string $reportMessage = NULL
 		): bool
 		{
 			$this->contents = Strings::replace($this->contents, $pattern, $replacement);
 			$wasChanged = $this->contents !== $this->originalContents;
 
-			if ($wasChanged && $engine !== NULL && $reportMessage !== NULL) {
-				$engine->reportFixInFile($reportMessage, $this->file);
+			if ($wasChanged && $reporter !== NULL && $reportMessage !== NULL) {
+				$reporter->reportFixInFile($reportMessage, $this->file);
 			}
 
 			return $wasChanged;

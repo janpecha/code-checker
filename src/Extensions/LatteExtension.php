@@ -8,6 +8,7 @@
 	use JP\CodeChecker\Engine;
 	use JP\CodeChecker\Extension;
 	use JP\CodeChecker\FileContent;
+	use JP\CodeChecker\Reporter;
 	use JP\CodeChecker\Version;
 
 
@@ -61,88 +62,88 @@
 		}
 
 
-		private function fixDeprecated(FileContent $contents, Engine $engine): void
+		private function fixDeprecated(FileContent $contents, Reporter $reporter): void
 		{
 			if ($this->version->isEqualOrGreater('2.4.0')) {
 				$contents->findAndReplace(
 					'#\\|escape\\|nl2br\\|noescape#m',
 					'|breaklines',
-					$engine,
+					$reporter,
 					'Latte: filter |nl2br replaced by filter |breaklines (deprecated in v2.4)'
 				);
 
 				$contents->findAndReplace(
 					'#{\\?\\s*#m',
 					'{php ',
-					$engine,
+					$reporter,
 					'Latte: tag {? expr} replaced by tag {php} (deprecated in v2.4)'
 				);
 
 				$contents->findAndReplace(
 					'#{php\\s+break}#m',
 					'{breakIf TRUE}',
-					$engine,
+					$reporter,
 					'Latte: keyword \'break\' is not supported in {php} (removed in v3.0)'
 				);
 
 				$contents->findAndReplace(
 					'#({var\\s+)(\\$[a-zA-Z0-9]+)(\\s+)\\+=(\\s+)#m',
 					'$1$2$3=$4$2 + ',
-					$engine,
+					$reporter,
 					'Latte: operation += is not supported in {var} (removed in v3.0)'
 				);
 			}
 		}
 
 
-		private function checkDeprecated(FileContent $contents, Engine $engine): void
+		private function checkDeprecated(FileContent $contents, Reporter $reporter): void
 		{
 			if ($contents->contains('<?php')) {
-				$engine->reportErrorInFile('Latte: template contains <?php open tag (deprecated in v2.4)', $contents->getFile());
+				$reporter->reportErrorInFile('Latte: template contains <?php open tag (deprecated in v2.4)', $contents->getFile());
 			}
 
 			if ($contents->contains('$template->') || $contents->contains('$template::') || $contents->contains('$template[')) {
-				$engine->reportWarningInFile('Latte: uses deprecated variable $template (deprecated in v2.4)', $contents->getFile());
+				$reporter->reportWarningInFile('Latte: uses deprecated variable $template (deprecated in v2.4)', $contents->getFile());
 			}
 
 			if ($contents->contains('$_l')) {
-				$engine->reportWarningInFile('Latte: uses deprecated variable $_l (deprecated in v2.4)', $contents->getFile());
+				$reporter->reportWarningInFile('Latte: uses deprecated variable $_l (deprecated in v2.4)', $contents->getFile());
 			}
 
 			if ($contents->contains('$_g')) {
-				$engine->reportWarningInFile('Latte: uses deprecated variable $_g (deprecated in v2.4)', $contents->getFile());
+				$reporter->reportWarningInFile('Latte: uses deprecated variable $_g (deprecated in v2.4)', $contents->getFile());
 			}
 
 			if ($contents->contains('$__')) {
-				$engine->reportErrorInFile('Latte: uses internal variable $__* (disabled in v2.9)', $contents->getFile());
+				$reporter->reportErrorInFile('Latte: uses internal variable $__* (disabled in v2.9)', $contents->getFile());
 			}
 
 			if ($contents->contains('$ʟ_')) {
-				$engine->reportErrorInFile('Latte: uses internal variable $ʟ_* (added in v2.8)', $contents->getFile());
+				$reporter->reportErrorInFile('Latte: uses internal variable $ʟ_* (added in v2.8)', $contents->getFile());
 			}
 
 			if (self::containsTag($contents, 'includeblock')) {
-				$engine->reportWarningInFile('Latte: uses deprecated tag {includeblock} (deprecated in v2.4)', $contents->getFile());
+				$reporter->reportWarningInFile('Latte: uses deprecated tag {includeblock} (deprecated in v2.4)', $contents->getFile());
 			}
 
 			if (self::containsTag($contents, 'use')) {
-				$engine->reportWarningInFile('Latte: uses deprecated tag {use} (deprecated in v2.4)', $contents->getFile());
+				$reporter->reportWarningInFile('Latte: uses deprecated tag {use} (deprecated in v2.4)', $contents->getFile());
 			}
 
 			if (self::containsTag($contents, 'status')) {
-				$engine->reportWarningInFile('Latte: uses deprecated tag {status} (deprecated in v2.4)', $contents->getFile());
+				$reporter->reportWarningInFile('Latte: uses deprecated tag {status} (deprecated in v2.4)', $contents->getFile());
 			}
 
 			if (self::containsTag($contents, '!')) {
-				$engine->reportErrorInFile('Latte: uses deprecated tag {!expr}, use filter |noescape instead (deprecated in v2.4)', $contents->getFile());
+				$reporter->reportErrorInFile('Latte: uses deprecated tag {!expr}, use filter |noescape instead (deprecated in v2.4)', $contents->getFile());
 			}
 
 			if (self::containsFilter($contents, 'nl2br')) {
-				$engine->reportErrorInFile('Latte: uses deprecated filter |nl2br (deprecated in v2.4)', $contents->getFile());
+				$reporter->reportErrorInFile('Latte: uses deprecated filter |nl2br (deprecated in v2.4)', $contents->getFile());
 			}
 
 			if (self::containsFilter($contents, 'safeurl')) {
-				$engine->reportErrorInFile('Latte: uses deprecated filter |safeurl (deprecated in v2.4)', $contents->getFile());
+				$reporter->reportErrorInFile('Latte: uses deprecated filter |safeurl (deprecated in v2.4)', $contents->getFile());
 			}
 
 			// TODO {extends} musi byt v hlavicce

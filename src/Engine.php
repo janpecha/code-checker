@@ -8,7 +8,7 @@
 	use Nette\Utils\Strings;
 
 
-	class Engine
+	class Engine implements Reporter
 	{
 		/** @var string */
 		private $projectDirectory;
@@ -103,9 +103,6 @@
 		}
 
 
-		/**
-		 * @param  string|\SplFileInfo $file
-		 */
 		public function reportErrorInFile(string $message, $file, ?int $line = NULL): void
 		{
 			$this->write($file, 'ERROR', $message, $line, 'red');
@@ -113,18 +110,12 @@
 		}
 
 
-		/**
-		 * @param  string|\SplFileInfo $file
-		 */
 		public function reportWarningInFile(string $message, $file, ?int $line = NULL): void
 		{
 			$this->write($file, 'WARNING', $message, $line, 'yellow');
 		}
 
 
-		/**
-		 * @param  string|\SplFileInfo $file
-		 */
 		public function reportFixInFile(string $message, $file, ?int $line = NULL): void
 		{
 			$this->write($file, $this->readOnly ? 'FOUND' : 'FIX', $message, $line, 'aqua');
