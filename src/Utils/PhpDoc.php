@@ -40,7 +40,7 @@
 		public static function addReturnTag(
 			PhpDocParser\Ast\PhpDoc\PhpDocNode $phpDoc,
 			string $returnType
-		): bool
+		): void
 		{
 			$phpDoc->children[] = new PhpDocParser\Ast\PhpDoc\PhpDocTagNode(
 				'@return',

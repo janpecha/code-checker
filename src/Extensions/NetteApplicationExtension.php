@@ -134,7 +134,7 @@
 
 					if ($methodFixed) {
 						$wasChanged = TRUE;
-						$engine->reportFixInFile('Nette: fixed visibility of ' . $classMethod->getFullName() . '()', $phpClass->getFileName());
+						$engine->reportFixInFile('Nette: fixed visibility of ' . $classMethod->getFullName() . '()', PhpReflection::getFileName($phpClass));
 					}
 				}
 			}
@@ -205,7 +205,7 @@
 							}
 
 							if ($methodFixed) {
-								$engine->reportFixInFile('Nette: added return type for ' . $classMethod->getFullName() . '()', $phpClass->getFileName());
+								$engine->reportFixInFile('Nette: added return type for ' . $classMethod->getFullName() . '()', PhpReflection::getFileName($phpClass));
 							}
 
 						} elseif ($actionType === 'remove-void') {
@@ -216,11 +216,15 @@
 							$phpDoc = $phpDocParser->parse($docComment);
 
 							foreach ($phpDoc->getTagsByName('@return') as $returnTag) {
-								if ($returnTag->value->type === 'void') {
+								if (!($returnTag->value instanceof \PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode)) {
+									continue;
+								}
+
+								if (((string) $returnTag->value->type) === 'void') {
 									PhpDoc::removeTag($phpDoc, $returnTag);
 									$classMethod->setDocComment((string) $phpDoc);
 									$methodFixed = TRUE;
-									$engine->reportFixInFile('Nette: removed return type from ' . $classMethod->getFullName() . '()', $phpClass->getFileName());
+									$engine->reportFixInFile('Nette: removed return type from ' . $classMethod->getFullName() . '()', PhpReflection::getFileName($phpClass));
 								}
 							}
 

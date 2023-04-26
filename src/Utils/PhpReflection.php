@@ -15,6 +15,13 @@
 		}
 
 
+		public static function getFileName(PhpSimpleAst\Reflection\ClassReflection $classReflection): string
+		{
+			$fileName = $classReflection->getFileName();
+			return $fileName !== NULL ? $fileName : '*unknow*';
+		}
+
+
 		/**
 		 * @param  iterable<string|\SplFileInfo> $files
 		 */
