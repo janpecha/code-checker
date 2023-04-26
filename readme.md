@@ -26,6 +26,8 @@ Options:
     -c <path>             Config file
     -f | --fix            Fixes files
     --no-progress         Do not show progress dots
+    --step-by-step        Stops on change or report
+    --git                 Enables GIT support (auto commit of changes)
 ```
 
 Config file `code-checker.php`:
@@ -35,7 +37,7 @@ Config file `code-checker.php`:
 
 return function (JP\CodeChecker\CheckerConfig $config) {
 	$config->addPath(__DIR__ . '/app');
-	JP\CodeChecker\Tasks\AutoConfig::configure($config);
+	JP\CodeChecker\AutoConfig::configure($config);
 };
 ```
 
