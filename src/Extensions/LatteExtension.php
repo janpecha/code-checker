@@ -62,7 +62,7 @@
 		}
 
 
-		private function fixDeprecated(FileContent $contents, Reporter $reporter): void
+		public function fixDeprecated(FileContent $contents, Reporter $reporter): void
 		{
 			if ($this->version->isEqualOrGreater('2.4.0')) {
 				$contents->findAndReplace(
@@ -96,7 +96,7 @@
 		}
 
 
-		private function checkDeprecated(FileContent $contents, Reporter $reporter): void
+		public function checkDeprecated(FileContent $contents, Reporter $reporter): void
 		{
 			if ($contents->contains('<?php')) {
 				$reporter->reportErrorInFile('Latte: template contains <?php open tag (deprecated in v2.4)', $contents->getFile());

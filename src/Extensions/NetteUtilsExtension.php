@@ -7,6 +7,8 @@
 	use JP\CodeChecker\CheckerConfig;
 	use JP\CodeChecker\Engine;
 	use JP\CodeChecker\Extension;
+	use JP\CodeChecker\FileContent;
+	use JP\CodeChecker\Reporter;
 	use JP\CodeChecker\Version;
 
 
@@ -34,35 +36,17 @@
 
 		public function run(Engine $engine): void
 		{
-			$files = $engine->findFiles($this->fileMask);
-
-			$this->fixNetteObjectUsage($engine, $files);
-		}
-
-
-		/**
-		 * @param  iterable<string|\SplFileInfo> $files
-		 */
-		private function fixNetteObjectUsage(Engine $engine, iterable $files): void
-		{
-			if (!$this->version->isEqualOrGreater('2.4.0')) {
-				return;
-			}
-
 			$wasChanged = FALSE;
+			$files = $engine->findFiles($this->fileMask);
 
 			foreach ($files as $file) {
 				$engine->progress();
-				$content = $engine->readFile($file);
-				$newContent = \Nette\Utils\Strings::replace(
-					$content,
-					'#(class [A-Z][a-zA-Z0-9_]+)\\sextends\\s(\\\\?Nette\\\\)Object((?:\\simplements [a-zA-Z0-9_\\\\]+){0,1}\\n(\\s*){)#m',
-					"$1$3\n$4\tuse $2SmartObject;\n"
-				);
+				$content = new FileContent($file, $engine->readFile($file));
 
-				if ($newContent !== $content) {
-					$engine->reportFixInFile('Nette: Nette\\Object replaced by Nette\\SmartObject (deprecated in v2.4.0)', $file);
-					$engine->writeFile($file, $newContent);
+				$this->fixNetteObjectUsage($content, $engine);
+
+				if ($content->wasChanged()) {
+					$engine->writeFile($file, (string) $content);
 					$wasChanged = TRUE;
 				}
 			}
@@ -70,6 +54,21 @@
 			if ($wasChanged) {
 				$engine->commit('Nette: replaced deprecated Nette\\Object by Nette\\SmartObject');
 			}
+		}
+
+
+		public function fixNetteObjectUsage(FileContent $fileContent, Reporter $reporter): void
+		{
+			if (!$this->version->isEqualOrGreater('2.4.0')) {
+				return;
+			}
+
+			$fileContent->findAndReplace(
+				'#(class [A-Z][a-zA-Z0-9_]+)\\sextends\\s(\\\\?Nette\\\\)Object((?:\\simplements [a-zA-Z0-9_\\\\]+){0,1}\\n(\\s*){)#m',
+				"$1$3\n$4\tuse $2SmartObject;\n",
+				$reporter,
+				'Nette: Nette\\Object replaced by Nette\\SmartObject (deprecated in v2.4.0)'
+			);
 		}
 
 

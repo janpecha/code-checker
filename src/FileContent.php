@@ -79,4 +79,16 @@
 		{
 			return $this->contents;
 		}
+
+
+		public static function fromFile(string $file): self
+		{
+			$s = file_get_contents($file);
+
+			if (!is_string($s)) {
+				throw new \RuntimeException('Reading of file ' . $file . ' failed.');
+			}
+
+			return new self($file, $s);
+		}
 	}

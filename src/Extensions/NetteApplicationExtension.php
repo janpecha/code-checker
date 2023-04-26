@@ -7,6 +7,8 @@
 	use JP\CodeChecker\CheckerConfig;
 	use JP\CodeChecker\Engine;
 	use JP\CodeChecker\Extension;
+	use JP\CodeChecker\FileContent;
+	use JP\CodeChecker\Reporter;
 	use JP\CodeChecker\Version;
 	use JP\CodeChecker\Utils\PhpDoc;
 	use JP\CodeChecker\Utils\PhpReflection;
@@ -39,7 +41,7 @@
 		{
 			$files = $engine->findFiles($this->fileMask);
 
-			$this->fixHttpMethodsInPresenters($engine, $files);
+			$this->processHttpMethodsInPresenters($engine, $files);
 			$this->fixPresenterMethodsVisibility($engine, $files);
 			$this->fixPresenterMethodsPhpDocReturnType($engine, $files);
 		}
@@ -48,7 +50,7 @@
 		/**
 		 * @param  iterable<string|\SplFileInfo> $files
 		 */
-		private function fixHttpMethodsInPresenters(Engine $engine, iterable $files): void
+		private function processHttpMethodsInPresenters(Engine $engine, iterable $files): void
 		{
 			if (!$this->version->isEqualOrGreater('2.4.0')) {
 				return;
@@ -58,16 +60,12 @@
 
 			foreach ($files as $file) {
 				$engine->progress();
-				$content = $engine->readFile($file);
-				$newContent = \Nette\Utils\Strings::replace(
-					$content,
-					'#->isPost\\(\\)#m',
-					'->isMethod(\'POST\')'
-				);
+				$content = new FileContent($file, $engine->readFile($file));
 
-				if ($newContent !== $content) {
-					$engine->reportFixInFile('Nette: HTTP - method isPost() is deprecated, use isMethod(\'POST\') (deprecated in v2.4.0)', $file);
-					$engine->writeFile($file, $newContent);
+				$this->fixHttpMethodsInPresenters($content, $engine);
+
+				if ($content->wasChanged()) {
+					$engine->writeFile($file, (string) $content);
 					$wasChanged = TRUE;
 				}
 			}
@@ -75,6 +73,17 @@
 			if ($wasChanged) {
 				$engine->commit('Nette: replaced deprecated method isPost() by isMethod(\'POST\')');
 			}
+		}
+
+
+		public function fixHttpMethodsInPresenters(FileContent $content, Reporter $reporter): void
+		{
+			$content->findAndReplace(
+				'#->isPost\\(\\)#m',
+				'->isMethod(\'POST\')',
+				$reporter,
+				'Nette: HTTP - method isPost() is deprecated, use isMethod(\'POST\') (deprecated in v2.4.0)'
+			);
 		}
 
 
