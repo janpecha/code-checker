@@ -20,3 +20,7 @@
 
 {* disabled in Latte 2.9 *}
 {$__}
+
+{* removed in Latte 3.0 *}
+{var $a = $a + 10}
+{breakIf TRUE}

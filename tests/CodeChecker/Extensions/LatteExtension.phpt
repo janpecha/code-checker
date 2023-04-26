@@ -21,6 +21,8 @@ test('Basic', function () {
 	Assert::same([
 		'FIX   | Latte: filter |nl2br replaced by filter |breaklines (deprecated in v2.4)',
 		'FIX   | Latte: tag {? expr} replaced by tag {php} (deprecated in v2.4)',
+		'FIX   | Latte: keyword \'break\' is not supported in {php} (removed in v3.0)',
+		'FIX   | Latte: operation += is not supported in {var} (removed in v3.0)',
 		'ERROR | Latte: template contains <?php open tag (deprecated in v2.4)',
 		'WARN  | Latte: uses deprecated variable $template (deprecated in v2.4)',
 		'WARN  | Latte: uses deprecated variable $_l (deprecated in v2.4)',
