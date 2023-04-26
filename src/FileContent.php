@@ -4,7 +4,8 @@
 
 	namespace JP\CodeChecker;
 
-use Nette\Utils\Strings;
+	use Nette\Utils\Strings;
+
 
 	class FileContent
 	{
