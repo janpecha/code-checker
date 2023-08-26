@@ -4,6 +4,8 @@
 
 	namespace JP\CodeChecker\Extensions;
 
+	use CzProject\PhpSimpleAst\Reflection\ClassReflection;
+	use CzProject\PhpSimpleAst\Reflection\FilesReflection;
 	use JP\CodeChecker\CheckerConfig;
 	use JP\CodeChecker\Engine;
 	use JP\CodeChecker\Extension;
@@ -49,8 +51,16 @@
 				);
 			}
 
-			$this->fixPresenterMethodsVisibility($engine, $files);
-			$this->fixPresenterMethodsPhpDocReturnType($engine, $files);
+			$analyzedReflection = PhpReflection::scanFiles($files, $engine->progressHandler());
+			$classesToProcess = $analyzedReflection->getClasses();
+
+			$filesReflection = new FilesReflection(array_merge(
+				$analyzedReflection->getFiles(),
+				PhpReflection::scanFiles($engine->findScannedFiles($this->fileMask), $engine->progressHandler())->getFiles()
+			));
+
+			$this->fixPresenterMethodsVisibility($engine, $classesToProcess, $filesReflection);
+			$this->fixPresenterMethodsPhpDocReturnType($engine, $classesToProcess, $filesReflection);
 		}
 
 
@@ -66,14 +76,13 @@
 
 
 		/**
-		 * @param  iterable<string|\SplFileInfo> $files
+		 * @param  ClassReflection[] $classesToProcess
 		 */
-		private function fixPresenterMethodsVisibility(Engine $engine, iterable $files): void
+		private function fixPresenterMethodsVisibility(Engine $engine, array $classesToProcess, FilesReflection $filesReflection): void
 		{
 			$wasChanged = FALSE;
-			$filesReflection = PhpReflection::scanFiles($files, $engine->progressHandler());
 
-			foreach ($filesReflection->getClasses() as $phpClass) {
+			foreach ($classesToProcess as $phpClass) {
 				$engine->progress();
 
 				if (!$filesReflection->isSubclassOf($phpClass, \Nette\Application\UI\Presenter::class)) {
@@ -125,15 +134,14 @@
 
 
 		/**
-		 * @param  iterable<string|\SplFileInfo> $files
+		 * @param  ClassReflection[] $classesToProcess
 		 */
-		private function fixPresenterMethodsPhpDocReturnType(Engine $engine, iterable $files): void
+		private function fixPresenterMethodsPhpDocReturnType(Engine $engine, array $classesToProcess, FilesReflection $filesReflection): void
 		{
 			$wasChanged = FALSE;
-			$filesReflection = PhpReflection::scanFiles($files, $engine->progressHandler());
 			$phpDocParser = NULL;
 
-			foreach ($filesReflection->getClasses() as $phpClass) {
+			foreach ($classesToProcess as $phpClass) {
 				$engine->progress();
 
 				if (!$filesReflection->isSubclassOf($phpClass, \Nette\Application\UI\Presenter::class)) {

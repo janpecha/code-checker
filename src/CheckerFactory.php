@@ -39,6 +39,7 @@
 		{
 			$extensions = $config->getExtensions();
 			$paths = $config->getPaths();
+			$scannedPaths = $config->getScannedPaths();
 			$tasks = $config->getTasks();
 
 			if (count($paths) === 0) {
@@ -56,6 +57,7 @@
 			$checker = new Checker(
 				$config->getProjectDirectory(),
 				$paths,
+				$scannedPaths,
 				array_merge(self::$ignore, $config->getIgnore()),
 				$extensions,
 				new \CzProject\GitPhp\Git
