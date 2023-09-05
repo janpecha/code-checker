@@ -1,6 +1,9 @@
 # JP\Code Checker
 
-[![Tests Status](https://github.com/janpecha/code-checker/workflows/Tests/badge.svg)](https://github.com/janpecha/code-checker/actions)
+[![Build Status](https://github.com/janpecha/code-checker/workflows/Build/badge.svg)](https://github.com/janpecha/code-checker/actions)
+[![Downloads this Month](https://img.shields.io/packagist/dm/janpecha/code-checker.svg)](https://packagist.org/packages/janpecha/code-checker)
+[![Latest Stable Version](https://poser.pugx.org/janpecha/code-checker/v/stable)](https://github.com/janpecha/code-checker/releases)
+[![License](https://img.shields.io/badge/license-New%20BSD-blue.svg)](https://github.com/janpecha/code-checker/blob/master/license.md)
 
 <a href="https://www.janpecha.cz/donate/"><img src="https://buymecoffee.intm.org/img/donate-banner.v1.svg" alt="Donate" height="100"></a>
 
