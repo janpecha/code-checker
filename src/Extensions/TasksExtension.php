@@ -68,6 +68,7 @@
 		): void
 		{
 			$origContents = $lastContents = file_get_contents($file);
+			$wasError = FALSE;
 
 			foreach ($tasks as $task) {
 				$handler = $task->getHandler();
@@ -85,6 +86,7 @@
 					[$type, $message, $line] = $result;
 					if ($type === \JP\CodeChecker\Result::ERROR) {
 						$engine->reportErrorInFile($message, $file, $line);
+						$wasError = TRUE;
 
 					} elseif ($type === \JP\CodeChecker\Result::WARNING) {
 						$engine->reportWarningInFile($message, $file, $line);
@@ -94,7 +96,7 @@
 					}
 				}
 
-				if (!$engine->isError()) {
+				if ($wasError) {
 					$lastContents = $contents;
 				}
 			}
