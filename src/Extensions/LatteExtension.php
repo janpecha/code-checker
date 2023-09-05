@@ -152,7 +152,6 @@
 		)
 		{
 			$config->addExtension(new self($version, $fileMask));
-			$config->addTask([\Nette\CodeChecker\Tasks::class, 'latteSyntaxChecker'], '*.latte');
 		}
 
 
