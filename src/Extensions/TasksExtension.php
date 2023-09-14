@@ -96,7 +96,7 @@
 					}
 				}
 
-				if ($wasError) {
+				if (!$wasError) {
 					$lastContents = $contents;
 				}
 			}
