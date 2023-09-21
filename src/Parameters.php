@@ -1,5 +1,7 @@
 <?php
 
+	declare(strict_types=1);
+
 	namespace JP\CodeChecker;
 
 	use Nette\Utils\Arrays;
