@@ -16,7 +16,7 @@
 composer require janpecha/code-checker
 ```
 
-CodeChecker requires PHP 7.2 or later.
+CodeChecker requires PHP 8.0 or later.
 
 
 ## Usage

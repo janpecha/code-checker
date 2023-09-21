@@ -10,7 +10,7 @@
 		}
 	],
 	"require": {
-		"php": ">=7.2.0",
+		"php": ">=8.0.0",
 		"nette/code-checker": "^3.2",
 		"czproject/assert": "^1.4",
 		"czproject/path-helper": "^4.1",
