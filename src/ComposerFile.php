@@ -5,6 +5,7 @@
 	namespace JP\CodeChecker;
 
 	use Nette\Utils\Arrays;
+	use Nette\Utils\Strings;
 
 
 	class ComposerFile
@@ -73,6 +74,16 @@
 		public function getPhpVersion(): ?Version
 		{
 			$version = Arrays::get($this->data, ['config', 'platform', 'php'], NULL);
+
+			if ($version === NULL) {
+				$data = Arrays::get($this->data, ['require', 'php'], NULL);
+
+				if (is_string($data) && ($match = Strings::match($data, '#^(>=)?(\\d+(.\\d+(.\\d+)?)?)$#D'))) {
+					assert(is_array($match) && isset($match[2]));
+					$version = $match[2];
+				}
+			}
+
 			return is_string($version) ? Version::fromString($version) : NULL;
 		}
 
