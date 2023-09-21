@@ -37,7 +37,9 @@
 		 */
 		public function getRequire(): array
 		{
-			return Arrays::get($this->data, 'require', []);
+			$data = Arrays::get($this->data, 'require', []);
+			assert(is_array($data));
+			return $data;
 		}
 
 
@@ -46,7 +48,9 @@
 		 */
 		public function getRequireDev(): array
 		{
-			return Arrays::get($this->data, 'require-dev', []);
+			$data = Arrays::get($this->data, 'require-dev', []);
+			assert(is_array($data));
+			return $data;
 		}
 
 
@@ -56,6 +60,7 @@
 		public function getLicense(): array
 		{
 			$licenses = Arrays::get($this->data, 'license', []);
+			assert(is_string($licenses) || is_array($licenses));
 
 			if (is_string($licenses)) {
 				$licenses = [$licenses];
@@ -76,6 +81,7 @@
 		{
 			$content = \Nette\Utils\FileSystem::read($path);
 			$data = \Nette\Utils\Json::decode($content, \Nette\Utils\Json::FORCE_ARRAY);
+			assert(is_array($data));
 			return new self($path, $data);
 		}
 	}
