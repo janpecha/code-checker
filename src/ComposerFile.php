@@ -78,9 +78,15 @@
 			if ($version === NULL) {
 				$data = Arrays::get($this->data, ['require', 'php'], NULL);
 
-				if (is_string($data) && ($match = Strings::match($data, '#^(>=)?(\\d+(.\\d+(.\\d+)?)?)$#D'))) {
-					assert(is_array($match) && isset($match[2]));
-					$version = $match[2];
+				if (is_string($data)) {
+					if ($match = Strings::match($data, '#^(>=)?(\\d+(.\\d+(.\\d+)?)?)$#D')) {
+						assert(is_array($match) && isset($match[2]));
+						$version = $match[2];
+
+					} elseif ($match = Strings::match($data, '#^(\\d+(.\\d+(.\\d+)?)?)\\s+\\-\\s+(\\d+(.\\d+(.\\d+)?)?)$#D')) {
+						assert(is_array($match) && isset($match[1]));
+						$version = $match[1];
+					}
 				}
 			}
 
