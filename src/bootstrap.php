@@ -96,7 +96,11 @@ if (!is_file($options['-c'])) {
 	throw new \RuntimeException('Config file ' . $options['-c'] . ' not found.');
 }
 
-$checkerRunner = CheckerFactory::create($options['-c']);
+$cwd = getcwd();
+$checkerRunner = CheckerFactory::create(
+	$options['-c'],
+	is_string($cwd) ? $cwd : NULL
+);
 $ok = $checkerRunner->run(
 	!isset($options['--fix']),
 	isset($options['--step-by-step']),

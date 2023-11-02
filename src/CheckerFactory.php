@@ -25,11 +25,18 @@
 		];
 
 
-		public static function create(string $configFile): Checker
+		public static function create(
+			string $configFile,
+			?string $currentWorkingDirectory = NULL
+		): Checker
 		{
 			$configurator = self::loadFile($configFile);
 			$config = new CheckerConfig($configFile);
 			$configurator($config);
+
+			if ($currentWorkingDirectory !== NULL && count($config->getPaths()) === 0) {
+				$config->addPath($currentWorkingDirectory);
+			}
 
 			return self::createChecker($config);
 		}
