@@ -7,8 +7,8 @@
 
 	class CheckerConfig
 	{
-		/** @var string */
-		private $configFile;
+		/** @var string|NULL */
+		private $baseDirectory;
 
 		/** @var string|NULL */
 		private $projectDirectory;
@@ -44,16 +44,20 @@
 		private $composerVersions;
 
 
-		public function __construct(string $configFile)
+		public function __construct(?string $baseDirectory)
 		{
-			$this->configFile = $configFile;
+			$this->baseDirectory = $baseDirectory;
 		}
 
 
 		public function getProjectDirectory(): string
 		{
+			if ($this->projectDirectory === NULL && $this->baseDirectory !== NULL) {
+				$this->projectDirectory = $this->baseDirectory;
+			}
+
 			if ($this->projectDirectory === NULL) {
-				$this->projectDirectory = dirname($this->configFile);
+				throw new \RuntimeException('ProjectDirectory is not set, use $config->setProjectDirectory().');
 			}
 
 			return $this->projectDirectory;

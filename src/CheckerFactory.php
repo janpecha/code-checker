@@ -26,13 +26,19 @@
 
 
 		public static function create(
-			string $configFile,
+			?string $configFile,
 			?string $currentWorkingDirectory = NULL
 		): Checker
 		{
-			$configurator = self::loadFile($configFile);
-			$config = new CheckerConfig($configFile);
-			$configurator($config);
+			if ($configFile !== NULL) {
+				$configurator = self::loadFile($configFile);
+				$config = new CheckerConfig(dirname($configFile));
+				$configurator($config);
+
+			} else {
+				$config = new CheckerConfig($currentWorkingDirectory);
+				AutoConfig::configure($config);
+			}
 
 			if ($currentWorkingDirectory !== NULL && count($config->getPaths()) === 0) {
 				$config->addPath($currentWorkingDirectory);
@@ -76,6 +82,10 @@
 
 		private static function loadFile(string $configFile): \Closure
 		{
+			if (!is_file($configFile)) {
+				throw new \RuntimeException('Config file ' . $configFile . ' not found.');
+			}
+
 			return require $configFile;
 		}
 	}

@@ -88,17 +88,9 @@ if (!$options['-c']) {
 	}
 }
 
-if (!$options['-c']) {
-	throw new \RuntimeException('Missing config file, use -c parameter.');
-}
-
-if (!is_file($options['-c'])) {
-	throw new \RuntimeException('Config file ' . $options['-c'] . ' not found.');
-}
-
 $cwd = getcwd();
 $checkerRunner = CheckerFactory::create(
-	$options['-c'],
+	isset($options['-c']) ? $options['-c'] : NULL,
 	is_string($cwd) ? $cwd : NULL
 );
 $ok = $checkerRunner->run(
