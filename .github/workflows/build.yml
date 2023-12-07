@@ -11,7 +11,7 @@ on:
 
 jobs:
     tests:
-        uses: janpecha/actions/.github/workflows/nette-tester-library.yml@master
+        uses: janpecha/actions/.github/workflows/nette-tester-project.yml@master
         with:
             phpVersions: '["8.1", "8.2", "8.3"]'
 

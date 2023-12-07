@@ -1,6 +1,6 @@
 {
 	"name": "janpecha/code-checker",
-	"type": "library",
+	"type": "project",
 	"description": "Code checker.",
 	"license": "BSD-3-Clause",
 	"authors": [
