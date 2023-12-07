@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use JP\CodeChecker\ComposerFile;
 use JP\CodeChecker\Version;
 use Tester\Assert;

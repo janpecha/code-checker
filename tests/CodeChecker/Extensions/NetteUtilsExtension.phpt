@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use JP\CodeChecker\Extensions;
 use JP\CodeChecker\FileContent;
 use JP\CodeChecker\MemoryReporter;

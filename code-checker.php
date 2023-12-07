@@ -1,6 +1,8 @@
 <?php
 
+declare(strict_types=1);
+
 return function (JP\CodeChecker\CheckerConfig $config) {
-	$config->addPath('./src');
+	$config->addIgnore('/jpx');
 	JP\CodeChecker\AutoConfig::configure($config);
 };

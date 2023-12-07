@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use JP\CodeChecker\Utils\FileContent;
 use Tester\Assert;
 

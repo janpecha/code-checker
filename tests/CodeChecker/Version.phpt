@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use JP\CodeChecker\Version;
 use Nette\CodeChecker\Result;
 use Tester\Assert;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use JP\CodeChecker\Utils\PhpCode;
 use Tester\Assert;
 
