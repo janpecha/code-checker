@@ -5,7 +5,7 @@ require __DIR__ . '/../vendor/autoload.php';
 Tester\Environment::setup();
 
 
-function test($description, callable $cb)
+function test(string $description, callable $cb): void
 {
 	$cb();
 }
@@ -21,6 +21,6 @@ class Fixtures
 
 	public static function load(string $path): string
 	{
-		return file_get_contents(self::path($path));
+		return (string) file_get_contents(self::path($path));
 	}
 }
