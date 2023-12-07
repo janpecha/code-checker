@@ -335,7 +335,7 @@
 
 			$base = basename($relativePath);
 			echo $this->console->color($color, str_pad("[$type]", 10)),
-				$base === $relativePath ? '' : $this->console->color('silver', dirname($relativePath) . DIRECTORY_SEPARATOR),
+				$base === $relativePath ? '' : $this->console->color('silver', rtrim(dirname($relativePath), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR),
 				$this->console->color('white', $base . ($line ? ':' . $line : '')), '    ',
 				$this->console->color($color, $message), "\n";
 		}
