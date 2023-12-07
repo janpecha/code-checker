@@ -9,9 +9,8 @@
 
 	class PhpReflection
 	{
-		public function __construct()
+		private function __construct()
 		{
-			throw new \RuntimeException('This is static class.');
 		}
 
 
