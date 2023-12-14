@@ -56,3 +56,16 @@ test('Fix no indentation', function () {
 		"\t\tnamespace Foo;",
 	]), $content);
 });
+
+
+test('Multiple declares (invalid)', function () {
+	$result = new Result;
+	$content = implode("\n", [
+		'<?php',
+		'declare(strict_types=1);',
+		'declare(strict_types=1);',
+		"\t\tnamespace Foo;",
+	]);
+	Tasks\Php::strictTypesDeclarationFixer($content, $result);
+	Assert::same([], $result->getMessages());
+});

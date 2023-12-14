@@ -37,7 +37,7 @@
 		{
 			$declarations = Utils\PhpCode::getDeclarations($contents);
 
-			if (!preg_match('#\bstrict_types\s*=\s*1\b#', implode('', $declarations))) {
+			if (!preg_match('#\bstrict_types\s*=\s*1\b#', implode("\n", $declarations))) {
 				if (str_starts_with($contents, '<?php')) {
 					$result->fix('Added missing declare(strict_types=1)');
 					$indent = Utils\FileContent::detectIndentation($contents);
