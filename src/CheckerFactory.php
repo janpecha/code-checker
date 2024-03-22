@@ -34,7 +34,7 @@
 		{
 			if ($configFile !== NULL) {
 				$configurator = self::loadConfigFile($configFile);
-				$config = new CheckerConfig(dirname($configFile));
+				$config = new CheckerConfig(dirname($configFile), $configFile);
 				$configurator($config);
 
 			} else {

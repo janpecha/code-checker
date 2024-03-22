@@ -11,6 +11,9 @@
 		private $baseDirectory;
 
 		/** @var string|NULL */
+		private $configFile;
+
+		/** @var string|NULL */
 		private $projectDirectory;
 
 		/** @var ComposerFile|NULL */
@@ -47,9 +50,19 @@
 		private $composerVersions;
 
 
-		public function __construct(?string $baseDirectory)
+		public function __construct(
+			?string $baseDirectory,
+			?string $configFile = NULL
+		)
 		{
 			$this->baseDirectory = $baseDirectory;
+			$this->configFile = $configFile;
+		}
+
+
+		public function getConfigFile(): ?string
+		{
+			return $this->configFile;
 		}
 
 
