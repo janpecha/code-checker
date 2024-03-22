@@ -75,8 +75,13 @@ if ($cmd->isEmpty()) {
 if (!$options['-c']) {
 	$configFiles = [
 		'code-checker.php',
+		'code-checker.neon',
+
 		'tests/code-checker.php',
+		'tests/code-checker.neon',
+
 		'.data/code-checker.php',
+		'.data/code-checker.neon',
 	];
 
 	$currentDirectory = getcwd();

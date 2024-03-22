@@ -4,6 +4,8 @@
 
 	namespace JP\CodeChecker;
 
+	use Nette\Neon\Neon;
+
 
 	class CheckerFactory
 	{
@@ -90,6 +92,9 @@
 
 			if (str_ends_with(strtolower($configFile), '.php')) {
 				$config = require $configFile;
+
+			} elseif (str_ends_with(strtolower($configFile), '.neon')) {
+				$config = Neon::decodeFile($configFile);
 			}
 
 			if ($config instanceof \Closure) {
