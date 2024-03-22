@@ -31,7 +31,7 @@
 		): Checker
 		{
 			if ($configFile !== NULL) {
-				$configurator = self::loadFile($configFile);
+				$configurator = self::loadConfigFile($configFile);
 				$config = new CheckerConfig(dirname($configFile));
 				$configurator($config);
 
@@ -80,12 +80,146 @@
 		}
 
 
-		private static function loadFile(string $configFile): \Closure
+		private static function loadConfigFile(string $configFile): \Closure
 		{
 			if (!is_file($configFile)) {
 				throw new \RuntimeException('Config file ' . $configFile . ' not found.');
 			}
 
-			return require $configFile;
+			$config = [];
+
+			if (str_ends_with(strtolower($configFile), '.php')) {
+				$config = require $configFile;
+			}
+
+			if ($config instanceof \Closure) {
+				return $config;
+			}
+
+			if ($config === NULL) {
+				$config = [];
+			}
+
+			if (!is_array($config)) {
+				throw new \RuntimeException('Config file ' . $configFile . ' is invalid.');
+			}
+
+			return function (CheckerConfig $checkerConfig) use ($config, $configFile) {
+				if (isset($config['projectDirectory'])) {
+					if (!is_string($config['projectDirectory'])) {
+						throw new \RuntimeException("Option 'projectDirectory' must be string (config file '$configFile').");
+					}
+
+					$checkerConfig->setProjectDirectory($config['projectDirectory']);
+				}
+
+				if (isset($config['composerFile'])) {
+					if (!is_string($config['composerFile'])) {
+						throw new \RuntimeException("Option 'composerFile' must be string (config file '$configFile').");
+					}
+
+					$checkerConfig->setComposerFile($config['composerFile']);
+				}
+
+				if (isset($config['phpVersion'])) {
+					if (!is_string($config['phpVersion'])) {
+						throw new \RuntimeException("Option 'phpVersion' must be string (config file '$configFile').");
+					}
+
+					$checkerConfig->setPhpVersion(Version::fromString($config['phpVersion']));
+				}
+
+				if (isset($config['parameters'])) {
+					if (!is_array($config['parameters'])) {
+						throw new \RuntimeException("Option 'parameters' must be array (config file '$configFile').");
+					}
+
+					$checkerConfig->setParameters($config['parameters']);
+				}
+
+				if (isset($config['paths'])) {
+					if (!is_array($config['paths'])) {
+						throw new \RuntimeException("Option 'paths' must be array (config file '$configFile').");
+					}
+
+					foreach ($config['paths'] as $k => $path) {
+						if (!is_string($path)) {
+							throw new \RuntimeException("Option 'paths' > '$k' must be string (config file '$configFile').");
+						}
+
+						$checkerConfig->addPath($path);
+					}
+				}
+
+				if (isset($config['scannedPaths'])) {
+					if (!is_array($config['scannedPaths'])) {
+						throw new \RuntimeException("Option 'scannedPaths' must be array (config file '$configFile').");
+					}
+
+					foreach ($config['scannedPaths'] as $k => $scannedPaths) {
+						if (!is_string($scannedPaths)) {
+							throw new \RuntimeException("Option 'scannedPaths' > '$k' must be string (config file '$configFile').");
+						}
+
+						$checkerConfig->addScannedPath($scannedPaths);
+					}
+				}
+
+				if (isset($config['ignore'])) {
+					if (!is_array($config['ignore'])) {
+						throw new \RuntimeException("Option 'ignore' must be array (config file '$configFile').");
+					}
+
+					foreach ($config['ignore'] as $k => $ignore) {
+						if (!is_string($ignore)) {
+							throw new \RuntimeException("Option 'ignore' > '$k' must be string (config file '$configFile').");
+						}
+
+						$checkerConfig->addIgnore($ignore);
+					}
+				}
+
+				if (isset($config['extensions'])) {
+					if (!is_array($config['extensions'])) {
+						throw new \RuntimeException("Option 'extensions' must be array (config file '$configFile').");
+					}
+
+					foreach ($config['extensions'] as $k => $extension) {
+						if (!($extension instanceof Extension)) {
+							throw new \RuntimeException("Option 'ignore' > '$k' must be instance of " . Extension::class . " (config file '$configFile').");
+						}
+
+						$checkerConfig->addExtension($extension);
+					}
+				}
+
+				if (isset($config['sets'])) {
+					if (!is_array($config['sets'])) {
+						throw new \RuntimeException("Option 'sets' must be array (config file '$configFile').");
+					}
+
+					foreach ($config['sets'] as $k => $setName) {
+						if (!is_string($setName)) {
+							throw new \RuntimeException("Option 'sets' > '$k' must be string (config file '$configFile').");
+						}
+
+						if (!class_exists($setName)) {
+							throw new \RuntimeException("Set '$setName' in option 'sets' > '$k' not found (config file '$configFile').");
+						}
+
+						if (!method_exists($setName, 'configure')) {
+							throw new \RuntimeException("Set '$setName' in option 'sets' > '$k' has not method 'configure()' (config file '$configFile').");
+						}
+
+						$methodReflection = new \ReflectionMethod($setName, 'configure');
+
+						if (!$methodReflection->isStatic()) {
+							throw new \RuntimeException("Set '$setName' in option 'sets' > '$k' has not static method 'configure()' (config file '$configFile').");
+						}
+
+						call_user_func([$setName, 'configure'], $checkerConfig);
+					}
+				}
+			};
 		}
 	}
