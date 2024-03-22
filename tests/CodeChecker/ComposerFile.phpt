@@ -59,7 +59,7 @@ test('getPhpVersion()', function () {
 		],
 	]);
 	Assert::true(isVersionEqual($composerFile->getPhpVersion(), '7.2.0'));
-	Assert::null($composerFile->getMaxPhpVersion());
+	Assert::true(isVersionEqual($composerFile->getMaxPhpVersion(), '7.2.9999'));
 });
 
 
