@@ -27,6 +27,7 @@ test('getPhpVersion()', function () {
 		],
 	]);
 	Assert::true(isVersionEqual($composerFile->getPhpVersion(), '8.0.0'));
+	Assert::null($composerFile->getMaxPhpVersion());
 
 	$composerFile = new ComposerFile(__DIR__ . '/composer.json', [
 		'require' => [
@@ -34,6 +35,7 @@ test('getPhpVersion()', function () {
 		],
 	]);
 	Assert::true(isVersionEqual($composerFile->getPhpVersion(), '7.2.1'));
+	Assert::null($composerFile->getMaxPhpVersion());
 
 	$composerFile = new ComposerFile(__DIR__ . '/composer.json', [
 		'require' => [
@@ -41,6 +43,7 @@ test('getPhpVersion()', function () {
 		],
 	]);
 	Assert::true(isVersionEqual($composerFile->getPhpVersion(), '7.0.0'));
+	Assert::null($composerFile->getMaxPhpVersion());
 
 	$composerFile = new ComposerFile(__DIR__ . '/composer.json', [
 		'require' => [
@@ -48,6 +51,7 @@ test('getPhpVersion()', function () {
 		],
 	]);
 	Assert::true(isVersionEqual($composerFile->getPhpVersion(), '7.4.0'));
+	Assert::null($composerFile->getMaxPhpVersion());
 
 	$composerFile = new ComposerFile(__DIR__ . '/composer.json', [
 		'require' => [
@@ -55,6 +59,7 @@ test('getPhpVersion()', function () {
 		],
 	]);
 	Assert::true(isVersionEqual($composerFile->getPhpVersion(), '7.2.0'));
+	Assert::null($composerFile->getMaxPhpVersion());
 });
 
 
@@ -68,6 +73,7 @@ test('getPhpVersion() Hyphenated Version Range', function () {
 		],
 	]);
 	Assert::true(isVersionEqual($composerFile->getPhpVersion(), '8.0.0'));
+	Assert::true(isVersionEqual($composerFile->getMaxPhpVersion(), '8.1.9999'));
 
 	$composerFile = new ComposerFile(__DIR__ . '/composer.json', [
 		'require' => [
@@ -75,6 +81,7 @@ test('getPhpVersion() Hyphenated Version Range', function () {
 		],
 	]);
 	Assert::true(isVersionEqual($composerFile->getPhpVersion(), '7.2.1'));
+	Assert::true(isVersionEqual($composerFile->getMaxPhpVersion(), '7.2.2'));
 
 	$composerFile = new ComposerFile(__DIR__ . '/composer.json', [
 		'require' => [
@@ -82,6 +89,7 @@ test('getPhpVersion() Hyphenated Version Range', function () {
 		],
 	]);
 	Assert::true(isVersionEqual($composerFile->getPhpVersion(), '5.6.0'));
+	Assert::true(isVersionEqual($composerFile->getMaxPhpVersion(), '8.2.2'));
 
 	$composerFile = new ComposerFile(__DIR__ . '/composer.json', [
 		'require' => [
@@ -89,4 +97,5 @@ test('getPhpVersion() Hyphenated Version Range', function () {
 		],
 	]);
 	Assert::true(isVersionEqual($composerFile->getPhpVersion(), '5.6.8'));
+	Assert::true(isVersionEqual($composerFile->getMaxPhpVersion(), '8.2.9999'));
 });

@@ -40,6 +40,9 @@
 		/** @var Version|NULL */
 		private $phpVersion;
 
+		/** @var Version|NULL */
+		private $maxPhpVersion;
+
 		/** @var ComposerVersions|NULL */
 		private $composerVersions;
 
@@ -132,6 +135,20 @@
 
 			$this->phpVersion = $phpVersion;
 			return $this;
+		}
+
+
+		public function getMaxPhpVersion(): Version
+		{
+			if ($this->maxPhpVersion === NULL) { // autodetect from composer.json => config.platform.php
+				$this->maxPhpVersion = $this->getComposerFile()->getMaxPhpVersion();
+			}
+
+			if ($this->maxPhpVersion === NULL) {
+				$this->maxPhpVersion = Version::fromString('8.3', TRUE);
+			}
+
+			return $this->maxPhpVersion;
 		}
 
 

@@ -94,6 +94,22 @@
 		}
 
 
+		public function getMaxPhpVersion(): ?Version
+		{
+			$version = NULL;
+			$data = Arrays::get($this->data, ['require', 'php'], NULL);
+
+			if (is_string($data)) {
+				if ($match = Strings::match($data, '#^(\\d+(.\\d+(.\\d+)?)?)\\s+\\-\\s+(\\d+(.\\d+(.\\d+)?)?)$#D')) {
+					assert(is_array($match) && isset($match[4]));
+					$version = $match[4];
+				}
+			}
+
+			return is_string($version) ? Version::fromString($version, TRUE) : NULL;
+		}
+
+
 		public static function open(string $path): self
 		{
 			$content = \Nette\Utils\FileSystem::read($path);
