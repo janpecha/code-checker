@@ -5,6 +5,7 @@
 	namespace JP\CodeChecker\Sets;
 
 	use JP\CodeChecker\CheckerConfig;
+	use JP\CodeChecker\Extensions;
 
 
 	class CzProjectMinimum
@@ -12,5 +13,6 @@
 		public static function configure(CheckerConfig $config): void
 		{
 			\JP\CodeChecker\AutoConfig::configure($config);
+			Extensions\JanpechaActionsExtension::configure($config);
 		}
 	}

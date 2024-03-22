@@ -33,6 +33,12 @@
 		}
 
 
+		public function getType(): ?string
+		{
+			return Arrays::get($this->data, 'type', NULL);
+		}
+
+
 		/**
 		 * @return array<string, string>
 		 */
