@@ -39,11 +39,14 @@
 
 			} else {
 				$config = new CheckerConfig($currentWorkingDirectory);
-				AutoConfig::configure($config);
 			}
 
 			if ($currentWorkingDirectory !== NULL && count($config->getPaths()) === 0) {
 				$config->addPath($currentWorkingDirectory);
+			}
+
+			if (count($config->getTasks()) === 0 && count($config->getExtensions()) === 0) {
+				AutoConfig::configure($config);
 			}
 
 			return self::createChecker($config);
