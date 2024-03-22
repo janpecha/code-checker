@@ -1,2 +1,5 @@
 ignore:
 	- /jpx
+
+sets:
+	- JP\CodeChecker\Sets\CzProjectMinimum
