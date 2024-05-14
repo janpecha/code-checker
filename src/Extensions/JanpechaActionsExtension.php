@@ -102,6 +102,7 @@
 				$created = FALSE;
 				$oldContent = $engine->readFile(self::BuildPath);
 				$yaml = Yaml::decode($oldContent);
+				assert(is_array($yaml));
 			}
 
 			if (!isset($yaml['name'])) {
@@ -129,6 +130,7 @@
 			$yaml = $this->createTestsJob($yaml, $engine);
 			$yaml = $this->createCodingStyleJob($yaml, $engine);
 			$yaml = $this->createStaticAnalysisJob($yaml, $engine);
+			assert(isset($yaml['jobs']) && is_array($yaml['jobs']));
 
 			if (count($yaml['jobs']) > 0) {
 				$newContent = Yaml::encode($yaml);
@@ -152,6 +154,8 @@
 				return $yaml;
 			}
 
+			assert(isset($yaml['jobs']) && is_array($yaml['jobs']));
+
 			if (!isset($yaml['jobs']['coding-style'])) {
 				$engine->reportFixInFile("Created job 'coding-style'", self::BuildPath);
 				$yaml['jobs']['coding-style'] = [
@@ -174,6 +178,8 @@
 		 */
 		private function createStaticAnalysisJob(array $yaml, CodeChecker\Engine $engine): array
 		{
+			assert(isset($yaml['jobs']) && is_array($yaml['jobs']));
+
 			if (!isset($yaml['jobs']['static-analysis']) && ($phpstanConfigPath = $this->findPhpStanConfig($engine)) !== NULL) {
 				$engine->reportFixInFile("Created job 'static-analysis'", self::BuildPath);
 				$yaml['jobs']['static-analysis'] = [
@@ -217,6 +223,8 @@
 				return $yaml;
 			}
 
+			assert(isset($yaml['jobs']) && is_array($yaml['jobs']));
+
 			if (!isset($yaml['jobs']['tests'])) {
 				$engine->reportFixInFile("Created job 'tests'", self::BuildPath);
 				$yaml['jobs']['tests'] = [
@@ -238,7 +246,7 @@
 					$yaml['jobs']['tests']['with']['workingDirectory'] = $this->workingDirectory;
 				}
 
-				if (count($yaml['jobs']['tests']['with']) === 0) {
+				if (count($yaml['jobs']['tests']['with']) === 0) { // @phpstan-ignore identical.alwaysFalse
 					unset($yaml['jobs']['tests']['with']);
 				}
 
@@ -268,7 +276,7 @@
 			);
 
 			$config->addExtension(new self(
-				$config->getComposerFile()->getType(),
+				$config->getComposerFile()->getType() ?? 'library',
 				$config->getPhpVersion(),
 				$config->getMaxPhpVersion(),
 				$config->getConfigFile() !== NULL,

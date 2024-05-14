@@ -45,7 +45,7 @@
 		{
 			$i = 0;
 
-			return preg_replace_callback('#^([\s]{4})?[a-zA-Z_\\\'-]+:#m', function ($match) use (&$i) {
+			return (string) preg_replace_callback('#^([\s]{4})?[a-zA-Z_\\\'-]+:#m', function ($match) use (&$i) {
 				$i++;
 
 				if ($i === 1) {

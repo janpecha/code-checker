@@ -35,7 +35,9 @@
 
 		public function getType(): ?string
 		{
-			return Arrays::get($this->data, 'type', NULL);
+			$type = Arrays::get($this->data, 'type', NULL);
+			assert(is_string($type) || is_null($type));
+			return $type;
 		}
 
 
