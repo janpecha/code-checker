@@ -33,6 +33,19 @@
 				},
 				'Presenters: Error - fixed deprecated sending of payload by terminate()'
 			);
+
+			$engine->processFiles(
+				$files,
+				function (FileContent $contents, Reporter $reporter) {
+					$contents->findAndReplace(
+						'/(function\s+renderDefault\\(\\\\)Exception(\s+)/m',
+						'$1Throwable$2',
+						$reporter,
+						'renderDefault() accepts Throwable'
+					);
+				},
+				'Presenters: Error - accepts Throwable'
+			);
 		}
 
 
