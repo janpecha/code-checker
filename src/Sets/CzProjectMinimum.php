@@ -16,6 +16,7 @@
 
 			\JP\CodeChecker\AutoConfig::configure($config);
 			Extensions\JanpechaActionsExtension::configure($config);
+			Extensions\JanpechaReadmeExtension::configure($config);
 
 			if ($composerVersions->hasPackage('nette/application')) {
 				Extensions\JanpechaNetteExtension::configure($config);
