@@ -43,4 +43,24 @@
 
 			return $declarations;
 		}
+
+
+		/**
+		 * @param  array<string|array{0: int, 1: string, 2: int}> $tokens
+		 */
+		public static function joinTokens(array $tokens): string
+		{
+			$s = '';
+
+			foreach ($tokens as $token) {
+				if (is_string($token)) {
+					$s .= $token;
+
+				} else {
+					$s .= $token[1];
+				}
+			}
+
+			return $s;
+		}
 	}

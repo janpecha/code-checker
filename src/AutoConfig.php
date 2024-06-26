@@ -13,6 +13,7 @@
 		{
 			Tasks\Files::configure($config);
 			Tasks\Php::configure($config);
+			Sets\Php::configure($config);
 
 			$composerVersions = $config->getComposerVersions();
 

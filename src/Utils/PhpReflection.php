@@ -45,6 +45,18 @@
 		}
 
 
+		public static function createFromFileContent(
+			PhpSimpleAst\AstParser $astParser,
+			\JP\CodeChecker\FileContent $fileContent
+		): PhpSimpleAst\Ast\PhpFile
+		{
+			return new PhpSimpleAst\Ast\PhpFile(
+				$fileContent->getFile(),
+				$astParser->parseString($fileContent->contents)
+			);
+		}
+
+
 		public static function saveFiles(
 			\JP\CodeChecker\Engine $engine,
 			PhpSimpleAst\Reflection\FilesReflection $filesReflection
