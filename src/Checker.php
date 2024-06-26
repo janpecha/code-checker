@@ -85,6 +85,7 @@
 			echo "Project directory: {$console->color('white', $this->projectDirectory)}\n";
 			echo "Scanning {$console->color('white', implode(', ', $this->paths))}\n";
 			$success = TRUE;
+			$startTime = microtime(TRUE);
 
 			foreach ($this->extensions as $extension) {
 				$extension->run($engine);
@@ -100,7 +101,13 @@
 				}
 			}
 
-			echo "Done.\n";
+			echo "Done ";
+			echo '(';
+			echo 'finished in ', round(microtime(TRUE) - $startTime, 2) . ' secs';
+			echo ', ';
+			echo 'used ', round(memory_get_peak_usage() / 1000 / 1000, 2), ' MB of memory';
+			echo ')';
+			echo "\n";
 			return $success;
 		}
 
