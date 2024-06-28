@@ -6,13 +6,16 @@
 
 	use JP\CodeChecker\CheckerConfig;
 	use JP\CodeChecker\Extensions;
+	use JP\CodeChecker\Rules;
 
 
 	class Php
 	{
 		public static function configure(CheckerConfig $config): void
 		{
-			$rules = [];
+			$rules = array_merge(
+				Rules\Nette\NetteRules::create($config)
+			);
 
 			$config->addExtension(new Extensions\PhpExtension(
 				['*.php', '*.phpt'],
