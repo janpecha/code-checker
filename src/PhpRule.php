@@ -17,16 +17,11 @@
 		}
 
 
-		/**
-		 * @param  array<string|array{0: int, 1: string, 2: int}> $tokens
-		 * @return array<string|array{0: int, 1: string, 2: int}>
-		 */
 		public function processTokens(
-			array $tokens,
+			PhpTokens $tokens,
 			Reporter $reporter
-		): array
+		): void
 		{
-			return $tokens;
 		}
 
 

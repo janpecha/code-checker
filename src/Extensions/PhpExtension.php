@@ -8,6 +8,7 @@
 	use JP\CodeChecker\Extension;
 	use JP\CodeChecker\FileContent;
 	use JP\CodeChecker\PhpRule;
+	use JP\CodeChecker\PhpTokens;
 	use JP\CodeChecker\Reporter;
 	use JP\CodeChecker\Utils;
 
@@ -98,8 +99,8 @@
 		{
 			$rule->processContent($fileContent, $reporter);
 
-			$tokens = @token_get_all($fileContent->contents); // @ can trigger error
+			$tokens = PhpTokens::fromString($fileContent->contents);
 			$rule->processTokens($tokens, $reporter);
-			$fileContent->contents = Utils\PhpCode::joinTokens($tokens);
+			$fileContent->contents = (string) $tokens;
 		}
 	}
