@@ -10,13 +10,26 @@
 		/** @var array<string|array{0: int, 1: string, 2: int}> */
 		public $tokens;
 
+		/** @var string|NULL */
+		private $file;
+
 
 		/**
 		 * @param array<string|array{0: int, 1: string, 2: int}> $tokens
 		 */
-		public function __construct(array $tokens)
+		public function __construct(
+			array $tokens,
+			?string $file = NULL
+		)
 		{
 			$this->tokens = $tokens;
+			$this->file = $file;
+		}
+
+
+		public function getFile(): ?string
+		{
+			return $this->file;
 		}
 
 
@@ -37,8 +50,11 @@
 		}
 
 
-		public static function fromString(string $s): self
+		public static function fromString(
+			string $s,
+			?string $file = NULL
+		): self
 		{
-			return new self(@token_get_all($s)); // @ can trigger error
+			return new self(@token_get_all($s), $file); // @ can trigger error
 		}
 	}
