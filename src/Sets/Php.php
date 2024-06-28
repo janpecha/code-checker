@@ -14,6 +14,7 @@
 		public static function configure(CheckerConfig $config): void
 		{
 			$rules = array_merge(
+				Rules\Php\PhpRules::create($config),
 				Rules\Nette\NetteRules::create($config)
 			);
 

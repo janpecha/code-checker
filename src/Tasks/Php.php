@@ -5,7 +5,6 @@
 	namespace JP\CodeChecker\Tasks;
 
 	use JP\CodeChecker\CheckerConfig;
-	use JP\CodeChecker\Utils;
 
 
 	class Php
@@ -25,27 +24,6 @@
 
 			if ($phpVersion->isEqualOrGreater('5.6.0')) {
 				$config->addTask([$tasks, 'shortArraySyntaxFixer'], '*.php,*.phpt');
-			}
-
-			if ($phpVersion->isEqualOrGreater('7.2.0') && $params->toBool('php.strictTypes', TRUE)) {
-				$config->addTask([__CLASS__, 'strictTypesDeclarationFixer'], '*.php,*.phpt');
-			}
-		}
-
-
-		public static function strictTypesDeclarationFixer(string &$contents, \Nette\CodeChecker\Result $result): void
-		{
-			$declarations = Utils\PhpCode::getDeclarations($contents);
-
-			if (!preg_match('#\bstrict_types\s*=\s*1\b#', implode("\n", $declarations))) {
-				if (str_starts_with($contents, '<?php')) {
-					$result->fix('Added missing declare(strict_types=1)');
-					$indent = Utils\FileContent::detectIndentation($contents);
-					$contents = "<?php\n\n" . $indent . "declare(strict_types=1);" . substr($contents, 5);
-
-				} else {
-					$result->error('Missing declare(strict_types=1)');
-				}
 			}
 		}
 	}
