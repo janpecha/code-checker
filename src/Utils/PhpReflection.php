@@ -50,9 +50,16 @@
 			\JP\CodeChecker\FileContent $fileContent
 		): PhpSimpleAst\Ast\PhpFile
 		{
+			try {
+				$code = $astParser->parseString($fileContent->contents);
+
+			} catch (PhpSimpleAst\InvalidStateException $e) {
+				throw new \RuntimeException("Parsing of file {$fileContent->getFile()} failed: " . $e->getMessage(), 0, $e);
+			}
+
 			return new PhpSimpleAst\Ast\PhpFile(
 				$fileContent->getFile(),
-				$astParser->parseString($fileContent->contents)
+				$code
 			);
 		}
 
