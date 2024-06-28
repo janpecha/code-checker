@@ -7,6 +7,9 @@
 
 	interface Rule
 	{
+		function getCommitMessage(): ?CommitMessage;
+
+
 		function processContent(
 			FileContent $fileContent,
 			Reporter $reporter

@@ -45,7 +45,7 @@
 			$files = $engine->findFiles($this->acceptMasks);
 			$filesReflection = NULL;
 
-			if ($engine->isStepByStep()) {
+			if ($engine->isStepByStep() || $engine->isGitEnabled()) {
 				foreach ($this->rules as $rule) {
 					foreach ($files as $file) {
 						$engine->processFiles(
@@ -56,7 +56,13 @@
 						);
 					}
 
-					if (!$engine->isSuccess()) {
+					$commitMessage = $rule->getCommitMessage();
+
+					if ($commitMessage !== NULL) {
+						$engine->commit((string) $commitMessage);
+					}
+
+					if ($engine->isStepByStep() && !$engine->isSuccess()) {
 						return;
 					}
 				}
@@ -82,7 +88,11 @@
 			}
 
 			foreach ($this->rules as $rule) {
-				$rule->processReflection($filesReflection, $engine);
+				$commitMessage = $rule->processReflection($filesReflection, $engine);
+
+				if ($commitMessage !== NULL) {
+					$engine->commit((string) $commitMessage);
+				}
 			}
 
 			Utils\PhpReflection::saveFiles($engine, $filesReflection);

@@ -9,6 +9,12 @@
 
 	abstract class PhpRule implements Rule
 	{
+		public function getCommitMessage(): ?CommitMessage
+		{
+			return NULL;
+		}
+
+
 		public function processContent(
 			FileContent $fileContent,
 			Reporter $reporter
@@ -28,7 +34,8 @@
 		public function processReflection(
 			PhpSimpleAst\Reflection\FilesReflection $filesReflection,
 			Reporter $reporter
-		): void
+		): ?CommitMessage
 		{
+			return NULL;
 		}
 	}

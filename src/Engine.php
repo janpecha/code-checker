@@ -97,6 +97,12 @@
 		}
 
 
+		public function isGitEnabled(): bool
+		{
+			return $this->gitRepository !== NULL;
+		}
+
+
 		public function progress(): void
 		{
 			$this->progressBar->progress();
