@@ -202,7 +202,7 @@
 			}
 
 			if (isset($yaml['jobs']['static-analysis']['with'])) {
-				$yaml['jobs']['static-analysis']['with']['phpVersions'] = $this->formatPhpVersions();
+				$yaml['jobs']['static-analysis']['with']['phpVersions'] = $this->formatPhpVersions(new Version('7.2.0'));
 			}
 
 			if (isset($yaml['jobs']['static-analysis']['with']) && count($yaml['jobs']['static-analysis']['with']) === 0) {
@@ -298,9 +298,9 @@
 		}
 
 
-		private function formatPhpVersions(): string
+		private function formatPhpVersions(Version $minimalPhpVersion = NULL): string
 		{
-			$s = Json::encode($this->findPhpVersions());
+			$s = Json::encode($this->findPhpVersions($minimalPhpVersion));
 			return str_replace('","', '", "', $s);
 		}
 
@@ -308,11 +308,15 @@
 		/**
 		 * @return string[]
 		 */
-		private function findPhpVersions(): array
+		private function findPhpVersions(Version $minimalPhpVersion = NULL): array
 		{
 			$res = [];
 
 			foreach (self::$phpVersions as $phpVersion) {
+				if ($minimalPhpVersion !== NULL && $minimalPhpVersion->compare($phpVersion, '>')) {
+					continue;
+				}
+
 				if ($this->phpVersion->compare($phpVersion, '<=') && $this->maxPhpVersion->compare($phpVersion, '>=')) {
 					$res[] = (string) Strings::before($phpVersion, '.', 2); // minor
 				}
