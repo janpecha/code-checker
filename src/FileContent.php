@@ -54,8 +54,8 @@
 		public function findAndReplace(
 			string $pattern,
 			string $replacement,
-			Reporter $reporter = NULL,
-			string $reportMessage = NULL
+			?Reporter $reporter = NULL,
+			?string $reportMessage = NULL
 		): bool
 		{
 			$newContents = Strings::replace($this->contents, $pattern, $replacement);

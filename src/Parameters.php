@@ -62,7 +62,7 @@
 		 * @param  string|string[] $key
 		 * @param  bool $defaultValue
 		 */
-		public function toBool($key, bool $defaultValue = NULL): bool
+		public function toBool($key, ?bool $defaultValue = NULL): bool
 		{
 			$value = $this->get($key, $defaultValue);
 
@@ -78,7 +78,7 @@
 		 * @param  string|string[] $key
 		 * @param  int $defaultValue
 		 */
-		public function toInt($key, int $defaultValue = NULL): int
+		public function toInt($key, ?int $defaultValue = NULL): int
 		{
 			$value = $this->get($key, $defaultValue);
 
@@ -94,7 +94,7 @@
 		 * @param  string|string[] $key
 		 * @param  string $defaultValue
 		 */
-		public function toString($key, string $defaultValue = NULL): string
+		public function toString($key, ?string $defaultValue = NULL): string
 		{
 			$value = $this->get($key, $defaultValue);
 

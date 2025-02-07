@@ -24,7 +24,7 @@
 		/**
 		 * @param  iterable<string|\SplFileInfo> $files
 		 */
-		public static function scanFiles(iterable $files, callable $onProgress = NULL): PhpSimpleAst\Reflection\FilesReflection
+		public static function scanFiles(iterable $files, ?callable $onProgress = NULL): PhpSimpleAst\Reflection\FilesReflection
 		{
 			$astParser = new PhpSimpleAst\AstParser;
 			$phpFiles = [];

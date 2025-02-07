@@ -299,7 +299,7 @@
 		}
 
 
-		private function formatPhpVersions(Version $minimalPhpVersion = NULL): string
+		private function formatPhpVersions(?Version $minimalPhpVersion = NULL): string
 		{
 			$s = Json::encode($this->findPhpVersions($minimalPhpVersion));
 			return str_replace('","', '", "', $s);
@@ -309,7 +309,7 @@
 		/**
 		 * @return string[]
 		 */
-		private function findPhpVersions(Version $minimalPhpVersion = NULL): array
+		private function findPhpVersions(?Version $minimalPhpVersion = NULL): array
 		{
 			$res = [];
 

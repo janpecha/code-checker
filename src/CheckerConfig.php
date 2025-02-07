@@ -269,7 +269,7 @@
 		}
 
 
-		public function addTask(callable $task, string $pattern = NULL): void
+		public function addTask(callable $task, ?string $pattern = NULL): void
 		{
 			$this->tasks[] = new Task($task, $pattern);
 		}
