@@ -95,7 +95,7 @@ if (!$options['-c']) {
 
 $cwd = getcwd();
 $checkerRunner = CheckerFactory::create(
-	isset($options['-c']) ? $options['-c'] : NULL,
+	(isset($options['-c']) && is_string($options['-c'])) ? $options['-c'] : NULL,
 	is_string($cwd) ? $cwd : NULL
 );
 $ok = $checkerRunner->run(

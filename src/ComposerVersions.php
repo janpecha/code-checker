@@ -54,6 +54,11 @@
 			}
 
 			$data = require $path;
+
+			if (!is_array($data)) {
+				throw new \RuntimeException("Invalid content of file '$path', try rerun `composer update` or `composer install`.");
+			}
+
 			$packages = [];
 
 			if (isset($data['versions']) && is_array($data['versions'])) {

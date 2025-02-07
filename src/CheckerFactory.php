@@ -225,7 +225,13 @@
 							throw new \RuntimeException("Set '$setName' in option 'sets' > '$k' has not static method 'configure()' (config file '$configFile').");
 						}
 
-						call_user_func([$setName, 'configure'], $checkerConfig);
+						$setFactory = [$setName, 'configure'];
+
+						if (!is_callable($setFactory)) {
+							throw new \RuntimeException("Set '$setName' in option 'sets' > '$k' has non-callable method 'configure()' (config file '$configFile').");
+						}
+
+						call_user_func($setFactory, $checkerConfig);
 					}
 				}
 			};

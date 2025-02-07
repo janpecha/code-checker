@@ -1,0 +1,151 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to function is_callable\(\) with array\{class\-string, ''configure''\} will always evaluate to false\.$#'
+			identifier: function.impossibleType
+			count: 1
+			path: src/CheckerFactory.php
+
+		-
+			message: '#^Parameter \#1 \$parameters of method JP\\CodeChecker\\CheckerConfig\:\:setParameters\(\) expects array\<string, mixed\>, array\<mixed, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/CheckerFactory.php
+
+		-
+			message: '#^Unreachable statement \- code above always terminates\.$#'
+			identifier: deadCode.unreachable
+			count: 1
+			path: src/CheckerFactory.php
+
+		-
+			message: '#^Call to function is_array\(\) with non\-empty\-array will always evaluate to true\.$#'
+			identifier: function.alreadyNarrowedType
+			count: 4
+			path: src/ComposerFile.php
+
+		-
+			message: '#^Method JP\\CodeChecker\\ComposerFile\:\:getLicense\(\) should return array\<string\> but returns array\<mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/ComposerFile.php
+
+		-
+			message: '#^Method JP\\CodeChecker\\ComposerFile\:\:getRequire\(\) should return array\<string, string\> but returns array\<mixed, mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/ComposerFile.php
+
+		-
+			message: '#^Method JP\\CodeChecker\\ComposerFile\:\:getRequireDev\(\) should return array\<string, string\> but returns array\<mixed, mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/ComposerFile.php
+
+		-
+			message: '#^Parameter \#2 \$data of class JP\\CodeChecker\\ComposerFile constructor expects array\<string, mixed\>, array\<mixed, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/ComposerFile.php
+
+		-
+			message: '#^Cannot access offset ''version'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/ComposerVersions.php
+
+		-
+			message: '#^Parameter \#1 \$packages of class JP\\CodeChecker\\ComposerVersions constructor expects array\<string, JP\\CodeChecker\\Version\>, array\<JP\\CodeChecker\\Version\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/ComposerVersions.php
+
+		-
+			message: '#^Method JP\\CodeChecker\\Engine\:\:findFiles\(\) return type with generic class AppendIterator does not specify its types\: TKey, TValue, TIterator$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Engine.php
+
+		-
+			message: '#^Method JP\\CodeChecker\\Engine\:\:findFiles\(\) should return AppendIterator&iterable\<SplFileInfo\> but returns AppendIterator\<mixed, mixed, Iterator\<TKey, TValue\>\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Engine.php
+
+		-
+			message: '#^Method JP\\CodeChecker\\Engine\:\:findScannedFiles\(\) return type with generic class AppendIterator does not specify its types\: TKey, TValue, TIterator$#'
+			identifier: missingType.generics
+			count: 1
+			path: src/Engine.php
+
+		-
+			message: '#^Method JP\\CodeChecker\\Engine\:\:findScannedFiles\(\) should return AppendIterator&iterable\<SplFileInfo\> but returns AppendIterator\<mixed, mixed, Iterator\<TKey, TValue\>\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Engine.php
+
+		-
+			message: '#^Cannot access offset ''phpVersions'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 3
+			path: src/Extensions/JanpechaActionsExtension.php
+
+		-
+			message: '#^Cannot access offset ''with'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: src/Extensions/JanpechaActionsExtension.php
+
+		-
+			message: '#^Parameter \#1 \$value of function count expects array\|Countable, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Extensions/JanpechaActionsExtension.php
+
+		-
+			message: '#^Parameter \#1 \$yaml of method JP\\CodeChecker\\Extensions\\JanpechaActionsExtension\:\:createTestsJob\(\) expects array\<string, mixed\>, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Extensions/JanpechaActionsExtension.php
+
+		-
+			message: '#^Cannot use array destructuring on mixed\.$#'
+			identifier: offsetAccess.nonArray
+			count: 1
+			path: src/Extensions/TasksExtension.php
+
+		-
+			message: '#^Parameter \#1 \$message of method JP\\CodeChecker\\Engine\:\:reportErrorInFile\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Extensions/TasksExtension.php
+
+		-
+			message: '#^Parameter \#1 \$message of method JP\\CodeChecker\\Engine\:\:reportFixInFile\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Extensions/TasksExtension.php
+
+		-
+			message: '#^Parameter \#1 \$message of method JP\\CodeChecker\\Engine\:\:reportWarningInFile\(\) expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Extensions/TasksExtension.php
+
+		-
+			message: '#^Parameter \#3 \$line of method JP\\CodeChecker\\Engine\:\:reportErrorInFile\(\) expects int\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Extensions/TasksExtension.php
+
+		-
+			message: '#^Parameter \#3 \$line of method JP\\CodeChecker\\Engine\:\:reportFixInFile\(\) expects int\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Extensions/TasksExtension.php
+
+		-
+			message: '#^Parameter \#3 \$line of method JP\\CodeChecker\\Engine\:\:reportWarningInFile\(\) expects int\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Extensions/TasksExtension.php
