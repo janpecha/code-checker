@@ -23,6 +23,12 @@
 		}
 
 
+		public function createProcessors(array $rules): array
+		{
+			return [];
+		}
+
+
 		private function processErrorPresenters(CodeChecker\Engine $engine): void
 		{
 			$files = $engine->findFiles('*ErrorPresenter.php');

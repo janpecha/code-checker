@@ -14,4 +14,11 @@
 		 * @return Rule[]
 		 */
 		function createRules(): array;
+
+
+		/**
+		 * @param  array<Rule> $rules
+		 * @return Processor[]
+		 */
+		function createProcessors(array $rules): array;
 	}

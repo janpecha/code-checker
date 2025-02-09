@@ -78,7 +78,8 @@
 				$scannedPaths,
 				array_merge(self::$ignore, $config->getIgnore()),
 				$extensions,
-				new \CzProject\GitPhp\Git
+				new \CzProject\GitPhp\Git,
+				self::$accept
 			);
 
 			return $checker;

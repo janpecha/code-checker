@@ -64,6 +64,12 @@
 		}
 
 
+		public function createProcessors(array $rules): array
+		{
+			return [];
+		}
+
+
 		/**
 		 * @param  Task[] $tasks
 		 */

@@ -70,6 +70,12 @@
 		}
 
 
+		public function createProcessors(array $rules): array
+		{
+			return [];
+		}
+
+
 		public function fixHttpMethodsInPresenters(FileContent $content, Reporter $reporter): void
 		{
 			$content->findAndReplace(

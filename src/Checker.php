@@ -19,6 +19,9 @@
 		private $scannedPaths = [];
 
 		/** @var string[] */
+		private $accept = [];
+
+		/** @var string[] */
 		private $ignore = [];
 
 		/** @var Extension[] */
@@ -31,6 +34,7 @@
 		/**
 		 * @param string[] $paths
 		 * @param string[] $scannedPaths
+		 * @param string[] $accept
 		 * @param string[] $ignore
 		 * @param Extension[] $extensions
 		 */
@@ -40,12 +44,14 @@
 			array $scannedPaths,
 			array $ignore,
 			array $extensions,
-			?GitPhp\Git $git = NULL
+			?GitPhp\Git $git = NULL,
+			array $accept = []
 		)
 		{
 			$this->projectDirectory = $projectDirectory;
 			$this->paths = $paths;
 			$this->scannedPaths = $scannedPaths;
+			$this->accept = $accept;
 			$this->ignore = $ignore;
 			$this->extensions = $extensions;
 			$this->git = $git;
@@ -101,6 +107,78 @@
 				}
 			}
 
+			$rules = [];
+
+			foreach ($this->extensions as $extension) {
+				$progressBar->progress();
+				$rules = array_merge(
+					$rules,
+					$extension->createRules()
+				);
+			}
+
+			$processors = [];
+
+			foreach ($this->extensions as $extension) {
+				if ($stepByStep || $gitSupport) {
+					foreach ($rules as $rule) {
+						$processors = array_merge(
+							$processors,
+							$extension->createProcessors([$rule])
+						);
+					}
+
+				} else {
+					$processors = array_merge(
+						$processors,
+						$extension->createProcessors($rules)
+					);
+				}
+			}
+
+			$progressBar->reset();
+			$files = $engine->findFiles($this->accept);
+
+			if ($stepByStep || $gitSupport) {
+				foreach ($processors as $processor) {
+					$progressBar->reset();
+					$commitMessage = $processor->getCommitMessage();
+
+					if ($commitMessage !== NULL && $gitRepository !== NULL && $gitRepository->hasChanges()) {
+						$engine->commit('CodeChecker fixes');
+					}
+
+					foreach ($files as $file) {
+						$progressBar->progress();
+						$this->processFile(
+							$engine,
+							(string) $file,
+							[$processor]
+						);
+					}
+
+					$success = $engine->isSuccess() && $success;
+
+					if ($engine->isStepByStep() && !$success) {
+						return FALSE;
+					}
+
+					if ($commitMessage !== NULL) {
+						$engine->commit((string) $commitMessage);
+					}
+				}
+
+			} else {
+				foreach ($files as $file) {
+					$progressBar->progress();
+					$this->processFile(
+						$engine,
+						(string) $file,
+						$processors
+					);
+				}
+			}
+
 			echo "Done ";
 			echo '(';
 			echo 'finished in ', round(microtime(TRUE) - $startTime, 2) . ' secs';
@@ -109,6 +187,30 @@
 			echo ')';
 			echo "\n";
 			return $success;
+		}
+
+
+		/**
+		 * @param  Processor[] $processors
+		 */
+		private function processFile(
+			Engine $engine,
+			string $file,
+			array $processors
+		): void
+		{
+			$content = FileContent::fromFile($file);
+
+			foreach ($processors as $processor) {
+				$processor->processContent(
+					$content,
+					$engine
+				);
+			}
+
+			if ($content->wasChanged()) {
+				$engine->writeFile($file, (string) $content);
+			}
 		}
 
 

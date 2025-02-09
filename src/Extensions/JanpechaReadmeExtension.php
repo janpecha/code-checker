@@ -36,6 +36,12 @@
 		}
 
 
+		public function createProcessors(array $rules): array
+		{
+			return [];
+		}
+
+
 		private function processReadmes(CodeChecker\Engine $engine): void
 		{
 			$files = $engine->findFiles('readme.md');

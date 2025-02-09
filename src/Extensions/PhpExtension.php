@@ -107,6 +107,12 @@
 		}
 
 
+		public function createProcessors(array $rules): array
+		{
+			return [];
+		}
+
+
 		private function processFileContent(
 			PhpRule $rule,
 			FileContent $fileContent,
