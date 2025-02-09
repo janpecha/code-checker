@@ -101,6 +101,12 @@
 		}
 
 
+		public function createRules(): array
+		{
+			return [];
+		}
+
+
 		private function processFileContent(
 			PhpRule $rule,
 			FileContent $fileContent,

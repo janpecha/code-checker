@@ -30,6 +30,12 @@
 		}
 
 
+		public function createRules(): array
+		{
+			return [];
+		}
+
+
 		private function processReadmes(CodeChecker\Engine $engine): void
 		{
 			$files = $engine->findFiles('readme.md');

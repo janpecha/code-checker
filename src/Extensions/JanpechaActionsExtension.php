@@ -87,6 +87,12 @@
 		}
 
 
+		public function createRules(): array
+		{
+			return [];
+		}
+
+
 		private function processBuildFile(CodeChecker\Engine $engine): void
 		{
 			if (!$engine->existsFile(self::BuildPath) && $engine->existsFile(self::BuildPathAlias)) {

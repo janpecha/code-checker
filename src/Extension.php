@@ -8,4 +8,10 @@
 	interface Extension
 	{
 		function run(Engine $engine): void;
+
+
+		/**
+		 * @return Rule[]
+		 */
+		function createRules(): array;
 	}

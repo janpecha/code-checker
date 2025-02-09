@@ -53,6 +53,12 @@
 		}
 
 
+		public function createRules(): array
+		{
+			return [];
+		}
+
+
 		public function fixDeprecated(FileContent $contents, Reporter $reporter): void
 		{
 			if ($this->version->isEqualOrGreater('2.4.0')) {

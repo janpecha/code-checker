@@ -17,6 +17,12 @@
 		}
 
 
+		public function createRules(): array
+		{
+			return [];
+		}
+
+
 		private function processErrorPresenters(CodeChecker\Engine $engine): void
 		{
 			$files = $engine->findFiles('*ErrorPresenter.php');

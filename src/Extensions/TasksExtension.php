@@ -58,6 +58,12 @@
 		}
 
 
+		public function createRules(): array
+		{
+			return [];
+		}
+
+
 		/**
 		 * @param  Task[] $tasks
 		 */
