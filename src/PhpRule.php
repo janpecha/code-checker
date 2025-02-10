@@ -15,14 +15,6 @@
 		}
 
 
-		public function processContent(
-			FileContent $fileContent,
-			Reporter $reporter
-		): void
-		{
-		}
-
-
 		public function processTokens(
 			PhpTokens $tokens,
 			Reporter $reporter

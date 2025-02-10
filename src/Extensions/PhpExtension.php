@@ -119,8 +119,6 @@
 			Reporter $reporter
 		): void
 		{
-			$rule->processContent($fileContent, $reporter);
-
 			$tokens = PhpTokens::fromString($fileContent->contents);
 			$rule->processTokens($tokens, $reporter);
 			$fileContent->contents = (string) $tokens;
