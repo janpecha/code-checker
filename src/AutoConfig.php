@@ -11,6 +11,7 @@
 	{
 		public static function configure(CheckerConfig $config): void
 		{
+			$config->addExtension(new Extensions\CoreExtension);
 			Tasks\Files::configure($config);
 			Tasks\Php::configure($config);
 			Sets\Php::configure($config);
