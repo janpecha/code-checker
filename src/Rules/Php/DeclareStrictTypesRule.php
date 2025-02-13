@@ -6,12 +6,12 @@
 
 	use JP\CodeChecker\CommitMessage;
 	use JP\CodeChecker\FileContent;
-	use JP\CodeChecker\PhpRule;
 	use JP\CodeChecker\Reporter;
+	use JP\CodeChecker\Rules\FileContentRule;
 	use JP\CodeChecker\Utils;
 
 
-	class DeclareStrictTypesRule extends PhpRule
+	class DeclareStrictTypesRule implements FileContentRule
 	{
 		public function getCommitMessage(): ?CommitMessage
 		{
@@ -26,6 +26,10 @@
 			Reporter $reporter
 		): void
 		{
+			if (!$fileContent->matchName(['*.php', '*.phpt'])) {
+				return;
+			}
+
 			$contents = $fileContent->contents;
 			$declarations = Utils\PhpCode::getDeclarations($contents);
 

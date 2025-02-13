@@ -5,13 +5,13 @@
 	namespace JP\CodeChecker\Rules\Php;
 
 	use JP\CodeChecker\CheckerConfig;
-	use JP\CodeChecker\PhpRule;
+	use JP\CodeChecker\Rule;
 
 
 	class PhpRules
 	{
 		/**
-		 * @return PhpRule[]
+		 * @return Rule[]
 		 */
 		public static function create(CheckerConfig $config): array
 		{

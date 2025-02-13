@@ -70,6 +70,26 @@
 		}
 
 
+		/**
+		 * @param  non-empty-string[] $acceptMasks
+		 */
+		public function matchName(array $acceptMasks): bool
+		{
+			$name = basename($this->file);
+			$res = FALSE;
+
+			foreach ($acceptMasks as $pattern) {
+				$neg = substr($pattern, 0, 1) === '!';
+
+				if (fnmatch(ltrim($pattern, '!'), $name, FNM_CASEFOLD)) {
+					$res = !$neg;
+				}
+			}
+
+			return $res;
+		}
+
+
 		public function match(string $pattern, int $flags = 0, int $offset = 0): bool
 		{
 			return (bool) Strings::match($this->contents, $pattern, $flags, $offset);

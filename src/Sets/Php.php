@@ -18,9 +18,10 @@
 				Rules\Nette\NetteRules::create($config)
 			);
 
+			$config->addRules($rules);
+
 			$config->addExtension(new Extensions\PhpExtension(
-				['*.php', '*.phpt'],
-				$rules
+				acceptMasks: ['*.php', '*.phpt'],
 			));
 		}
 	}

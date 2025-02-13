@@ -34,6 +34,9 @@
 		/** @var Extension[] */
 		private $extensions = [];
 
+		/** @var Rule[] */
+		private $rules = [];
+
 		/** @var Task[] */
 		private $tasks = [];
 
@@ -257,6 +260,30 @@
 		public function getExtensions(): array
 		{
 			return $this->extensions;
+		}
+
+
+		public function addRule(Rule $rule): void
+		{
+			$this->rules[] = $rule;
+		}
+
+
+		/**
+		 * @param  Rule[] $rules
+		 */
+		public function addRules(array $rules): void
+		{
+			$this->rules = array_merge($this->rules, $rules);
+		}
+
+
+		/**
+		 * @return Rule[]
+		 */
+		public function getRules(): array
+		{
+			return $this->rules;
 		}
 
 

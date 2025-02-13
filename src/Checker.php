@@ -27,6 +27,9 @@
 		/** @var Extension[] */
 		private $extensions = [];
 
+		/** @var Rule[] */
+		private $rules = [];
+
 		/** @var GitPhp\Git|NULL */
 		private $git;
 
@@ -37,6 +40,7 @@
 		 * @param string[] $accept
 		 * @param string[] $ignore
 		 * @param Extension[] $extensions
+		 * @param Rule[] $rules
 		 */
 		public function __construct(
 			string $projectDirectory,
@@ -45,7 +49,8 @@
 			array $ignore,
 			array $extensions,
 			?GitPhp\Git $git = NULL,
-			array $accept = []
+			array $accept = [],
+			array $rules = [],
 		)
 		{
 			$this->projectDirectory = $projectDirectory;
@@ -54,6 +59,7 @@
 			$this->accept = $accept;
 			$this->ignore = $ignore;
 			$this->extensions = $extensions;
+			$this->rules = $rules;
 			$this->git = $git;
 		}
 
@@ -107,7 +113,7 @@
 				}
 			}
 
-			$rules = [];
+			$rules = $this->rules;
 
 			foreach ($this->extensions as $extension) {
 				$progressBar->progress();

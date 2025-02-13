@@ -6,11 +6,11 @@
 
 	use JP\CodeChecker\CommitMessage;
 	use JP\CodeChecker\FileContent;
-	use JP\CodeChecker\PhpRule;
 	use JP\CodeChecker\Reporter;
+	use JP\CodeChecker\Rules\FileContentRule;
 
 
-	class NetteObjectRule extends PhpRule
+	class NetteObjectRule implements FileContentRule
 	{
 		public function getCommitMessage(): ?CommitMessage
 		{

@@ -5,13 +5,13 @@
 	namespace JP\CodeChecker\Rules\Nette;
 
 	use JP\CodeChecker\CheckerConfig;
-	use JP\CodeChecker\PhpRule;
+	use JP\CodeChecker\Rule;
 
 
 	class NetteUtilsRules
 	{
 		/**
-		 * @return PhpRule[]
+		 * @return Rule[]
 		 */
 		public static function create(CheckerConfig $config): array
 		{

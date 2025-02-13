@@ -16,7 +16,8 @@
 		"czproject/path-helper": "^4.1",
 		"czproject/git-php": "^4.0",
 		"czproject/php-simple-ast": "^1.2",
-		"symfony/yaml": "^7.0"
+		"symfony/yaml": "^7.0",
+		"nette/utils": "^3.1"
 	},
 	"require-dev": {
 		"nette/tester": "^2.4"

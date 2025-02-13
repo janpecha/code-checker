@@ -45,7 +45,7 @@
 				$config->addPath($currentWorkingDirectory);
 			}
 
-			if (count($config->getTasks()) === 0 && count($config->getExtensions()) === 0) {
+			if (count($config->getRules()) === 0 && count($config->getTasks()) === 0 && count($config->getExtensions()) === 0) {
 				AutoConfig::configure($config);
 			}
 
@@ -79,7 +79,8 @@
 				array_merge(self::$ignore, $config->getIgnore()),
 				$extensions,
 				new \CzProject\GitPhp\Git,
-				self::$accept
+				self::$accept,
+				$config->getRules()
 			);
 
 			return $checker;

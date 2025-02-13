@@ -6,98 +6,29 @@
 
 	use JP\CodeChecker\Engine;
 	use JP\CodeChecker\Extension;
-	use JP\CodeChecker\FileContent;
-	use JP\CodeChecker\PhpRule;
-	use JP\CodeChecker\PhpTokens;
-	use JP\CodeChecker\Reporter;
-	use JP\CodeChecker\Utils;
+	use JP\CodeChecker\Processors\PhpProcessor;
+	use JP\CodeChecker\Rules\PhpTokensRule;
 
 
 	class PhpExtension implements Extension
 	{
-		/** @var string[] */
+		/** @var non-empty-string[] */
 		private $acceptMasks;
-
-		/** @var PhpRule[] */
-		private $rules;
 
 
 		/**
-		 * @param  string[] $acceptMasks
-		 * @param  PhpRule[] $rules
+		 * @param  non-empty-string[] $acceptMasks
 		 */
 		public function __construct(
 			array $acceptMasks,
-			array $rules
 		)
 		{
 			$this->acceptMasks = $acceptMasks;
-			$this->rules = $rules;
 		}
 
 
 		public function run(Engine $engine): void
 		{
-			if (count($this->rules) === 0) {
-				return;
-			}
-
-			$files = $engine->findFiles($this->acceptMasks);
-			$filesReflection = NULL;
-
-			if ($engine->isStepByStep() || $engine->isGitEnabled()) {
-				foreach ($this->rules as $rule) {
-					foreach ($files as $file) {
-						$engine->processFiles(
-							[$file],
-							function (FileContent $fileContent, Reporter $reporter) use ($rule) {
-								$this->processFileContent($rule, $fileContent, $reporter);
-							}
-						);
-					}
-
-					$commitMessage = $rule->getCommitMessage();
-
-					if ($commitMessage !== NULL) {
-						$engine->commit((string) $commitMessage);
-					}
-
-					if ($engine->isStepByStep() && !$engine->isSuccess()) {
-						return;
-					}
-				}
-
-				$filesReflection = Utils\PhpReflection::scanFiles($files, [$engine, 'progress']);
-
-			} else {
-				$astParser = new \CzProject\PhpSimpleAst\AstParser;
-				$phpFiles = [];
-
-				$engine->processFiles(
-					$files,
-					function (FileContent $fileContent, Reporter $reporter) use ($astParser, &$phpFiles) {
-						foreach ($this->rules as $rule) {
-							$this->processFileContent($rule, $fileContent, $reporter);
-						}
-
-						$phpFiles[] = Utils\PhpReflection::createFromFileContent($astParser, $fileContent);
-					}
-				);
-
-				$filesReflection = new \CzProject\PhpSimpleAst\Reflection\FilesReflection($phpFiles);
-			}
-
-			foreach ($this->rules as $rule) {
-				$commitMessage = $rule->processReflection($filesReflection, $engine);
-
-				if ($commitMessage !== NULL) {
-					$engine->commit((string) $commitMessage);
-				}
-			}
-
-			Utils\PhpReflection::saveFiles($engine, $filesReflection);
-
-			$engine->commit('PHP: code fixes');
 		}
 
 
@@ -109,18 +40,23 @@
 
 		public function createProcessors(array $rules): array
 		{
+			$tokensRules = [];
+
+			foreach ($rules as $rule) {
+				if ($rule instanceof PhpTokensRule) {
+					$tokensRules[] = $rule;
+				}
+			}
+
+			if (count($tokensRules) > 0) {
+				return [
+					new PhpProcessor(
+						$this->acceptMasks,
+						$tokensRules,
+					),
+				];
+			}
+
 			return [];
-		}
-
-
-		private function processFileContent(
-			PhpRule $rule,
-			FileContent $fileContent,
-			Reporter $reporter
-		): void
-		{
-			$tokens = PhpTokens::fromString($fileContent->contents);
-			$rule->processTokens($tokens, $reporter);
-			$fileContent->contents = (string) $tokens;
 		}
 	}
