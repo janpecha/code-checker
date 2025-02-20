@@ -101,7 +101,12 @@
 					? $this->composerFilePath
 					: $this->processPath('./composer.json');
 
-				$this->composerFile = ComposerFile::open($path);
+				if (is_file($path)) {
+					$this->composerFile = ComposerFile::open($path);
+
+				} else {
+					$this->composerFile = new ComposerFile($path, []);
+				}
 			}
 
 			return $this->composerFile;
