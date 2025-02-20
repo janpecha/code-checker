@@ -141,6 +141,10 @@
 			}
 
 			if ($this->phpVersion === NULL) {
+				$this->phpVersion = new Version(phpversion());
+			}
+
+			if ($this->phpVersion === NULL) {
 				throw new \RuntimeException('PhpVersion is missing, use setPhpVersion().');
 			}
 
