@@ -44,7 +44,7 @@
 		public static function create(string $composerFile): self
 		{
 			if (!is_file($composerFile)) {
-				throw new \RuntimeException("Composer file '$composerFile' not found.");
+				return new self([]);
 			}
 
 			$path = dirname($composerFile) . '/vendor/composer/installed.php';
