@@ -47,26 +47,17 @@
 				return new self([]);
 			}
 
-			$path = dirname($composerFile) . '/vendor/composer/installed.php';
-
-			if (!is_file($path)) {
-				throw new \RuntimeException("Missing file '$path', run `composer update` or `composer install`.");
-			}
-
-			$data = require $path;
-
-			if (!is_array($data)) {
-				throw new \RuntimeException("Invalid content of file '$path', try rerun `composer update` or `composer install`.");
-			}
-
+			$composerFile = ComposerFile::open($composerFile);
+			$versionParser = new \Composer\Semver\VersionParser;
 			$packages = [];
 
-			if (isset($data['versions']) && is_array($data['versions'])) {
-				foreach ($data['versions'] as $packageName => $packageData) {
-					if (isset($packageData['version']) && is_string($packageData['version']) && $packageData['version'] !== '' && self::isVersionValid($packageData['version'])) {
-						$parts = explode('.', $packageData['version']);
-						$packages[$packageName] = new Version(implode('.', [$parts[0], $parts[1], $parts[2]]));
-					}
+			foreach ($composerFile->getRequire() as $packageName => $constraint) {
+				$packageConstraint = $versionParser->parseConstraints($constraint);
+				$packageVersion = $packageConstraint->getLowerBound()->getVersion();
+
+				if (self::isVersionValid($packageVersion)) {
+					$parts = explode('.', $packageVersion);
+					$packages[$packageName] = new Version(implode('.', [$parts[0], $parts[1], $parts[2]]));
 				}
 			}
 
@@ -80,6 +71,6 @@
 		 */
 		private static function isVersionValid($version)
 		{
-			return (bool) Strings::match($version, '#^(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\z#');
+			return (bool) Strings::match($version, '#^(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\.(?:0|[1-9]\\d*)\\-.+\\z#');
 		}
 	}

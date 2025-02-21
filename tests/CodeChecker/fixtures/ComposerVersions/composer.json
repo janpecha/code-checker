@@ -1,2 +1,5 @@
 {
+	"require": {
+		"czproject/assert": "^1.4.1"
+	}
 }
