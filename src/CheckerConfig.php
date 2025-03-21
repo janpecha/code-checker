@@ -158,7 +158,7 @@
 			}
 
 			if ($this->maxPhpVersion === NULL) {
-				$this->maxPhpVersion = Version::fromString('8.3', TRUE);
+				$this->maxPhpVersion = Version::fromString('8.4', TRUE);
 			}
 
 			return $this->maxPhpVersion;
