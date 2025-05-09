@@ -259,7 +259,7 @@
 					$yaml['jobs']['tests']['with']['workingDirectory'] = $this->workingDirectory;
 				}
 
-				if (count($yaml['jobs']['tests']['with']) === 0) { // @phpstan-ignore identical.alwaysFalse
+				if (count($yaml['jobs']['tests']['with']) === 0) {
 					unset($yaml['jobs']['tests']['with']);
 				}
 

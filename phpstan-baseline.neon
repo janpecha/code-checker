@@ -49,18 +49,6 @@ parameters:
 			path: src/ComposerFile.php
 
 		-
-			message: '#^Cannot access offset ''version'' on mixed\.$#'
-			identifier: offsetAccess.nonOffsetAccessible
-			count: 1
-			path: src/ComposerVersions.php
-
-		-
-			message: '#^Parameter \#1 \$packages of class JP\\CodeChecker\\ComposerVersions constructor expects array\<string, JP\\CodeChecker\\Version\>, array\<JP\\CodeChecker\\Version\> given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/ComposerVersions.php
-
-		-
 			message: '#^Method JP\\CodeChecker\\Engine\:\:findFiles\(\) return type with generic class AppendIterator does not specify its types\: TKey, TValue, TIterator$#'
 			identifier: missingType.generics
 			count: 1
@@ -97,9 +85,15 @@ parameters:
 			path: src/Extensions/JanpechaActionsExtension.php
 
 		-
+			message: '#^Cannot access offset ''workingDirectory'' on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Extensions/JanpechaActionsExtension.php
+
+		-
 			message: '#^Parameter \#1 \$value of function count expects array\|Countable, mixed given\.$#'
 			identifier: argument.type
-			count: 1
+			count: 2
 			path: src/Extensions/JanpechaActionsExtension.php
 
 		-
