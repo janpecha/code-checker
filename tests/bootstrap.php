@@ -5,6 +5,7 @@ declare(strict_types=1);
 require __DIR__ . '/../vendor/autoload.php';
 
 Tester\Environment::setup();
+error_reporting(~E_DEPRECATED);
 
 
 function test(string $description, callable $cb): void
