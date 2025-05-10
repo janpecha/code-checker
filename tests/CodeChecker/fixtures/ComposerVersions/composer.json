@@ -1,5 +1,8 @@
 {
 	"require": {
 		"czproject/assert": "^1.4.1"
+	},
+	"require-dev": {
+		"nette/tester": "^2.4"
 	}
 }

@@ -17,3 +17,11 @@ test('Basic', function () {
 
 	Assert::false($versions->hasPackage('janpecha/code-checker')); // root package
 });
+
+
+test('Dev packages', function () {
+	$versions = ComposerVersions::create(__DIR__ . '/fixtures/ComposerVersions/composer.json');
+
+	Assert::true($versions->hasPackage('nette/tester'));
+	Assert::true($versions->getVersion('nette/tester')->isEqual('2.4.0'));
+});

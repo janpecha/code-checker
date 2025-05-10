@@ -51,7 +51,12 @@
 			$versionParser = new \Composer\Semver\VersionParser;
 			$packages = [];
 
-			foreach ($composerFile->getRequire() as $packageName => $constraint) {
+			$composerPackages = array_merge(
+				$composerFile->getRequireDev(),
+				$composerFile->getRequire(),
+			);
+
+			foreach ($composerPackages as $packageName => $constraint) {
 				$packageConstraint = $versionParser->parseConstraints($constraint);
 				$packageVersion = $packageConstraint->getLowerBound()->getVersion();
 
