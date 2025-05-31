@@ -183,6 +183,8 @@
 						$processors
 					);
 				}
+
+				$success = $engine->isSuccess() && $success;
 			}
 
 			echo "Done ";
