@@ -158,7 +158,7 @@
 						$progressBar->progress();
 						$this->processFile(
 							$engine,
-							(string) $file,
+							$file,
 							[$processor]
 						);
 					}
@@ -179,7 +179,7 @@
 					$progressBar->progress();
 					$this->processFile(
 						$engine,
-						(string) $file,
+						$file,
 						$processors
 					);
 				}
@@ -203,11 +203,11 @@
 		 */
 		private function processFile(
 			Engine $engine,
-			string $file,
+			\SplFileInfo $file,
 			array $processors
 		): void
 		{
-			$content = FileContent::fromFile($file);
+			$content = FileContent::fromFile((string) $file);
 
 			foreach ($processors as $processor) {
 				$processor->processContent(
