@@ -28,12 +28,16 @@
 
 
 		/**
-		 * @param  string $version
 		 * @param  string $operator
 		 * @return bool
 		 */
-		public function compare($version, $operator)
+		public function compare(string|self $version, $operator)
 		{
+			if ($version instanceof self) {
+				Assert::true(self::isOperatorValid($operator), 'Invalid operator.');
+				return version_compare($this->version, $version->version, $operator);
+			}
+
 			Assert::true(self::isValid($version), 'Invalid version string.');
 			Assert::true(self::isOperatorValid($operator), 'Invalid operator.');
 			return version_compare($this->version, $version, $operator);
@@ -41,20 +45,18 @@
 
 
 		/**
-		 * @param  string $version
 		 * @return bool
 		 */
-		public function isEqual($version)
+		public function isEqual(string|self $version)
 		{
 			return $this->compare($version, '=');
 		}
 
 
 		/**
-		 * @param  string $version
 		 * @return bool
 		 */
-		public function isEqualOrGreater($version)
+		public function isEqualOrGreater(string|self $version)
 		{
 			return $this->compare($version, '>=');
 		}
