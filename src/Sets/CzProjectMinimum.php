@@ -13,7 +13,7 @@
 	{
 		public static function configure(CheckerConfig $config): void
 		{
-			if ($config->getComposerFile()->getType() === 'library') {
+			if ($config->getComposerFile()->isLibrary()) {
 				$currentMinimalVersion = $config->getPhpVersion();
 				$minimalRequiredVersion = new Version('8.0.0');
 

@@ -41,6 +41,13 @@
 		}
 
 
+		public function isLibrary(): bool
+		{
+			$type = $this->getType();
+			return $type === 'library' || $type === NULL;
+		}
+
+
 		/**
 		 * @return array<string, string>
 		 */

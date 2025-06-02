@@ -69,7 +69,7 @@
 
 		public static function configure(CodeChecker\CheckerConfig $config): void
 		{
-			if ($config->getComposerFile()->getType() === 'library') {
+			if ($config->getComposerFile()->isLibrary()) {
 				$config->addExtension(new self(
 					$config->getComposerFile()->getPath(),
 					$config->getPhpVersion(),
