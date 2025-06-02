@@ -14,7 +14,7 @@ test('Nette\\Object replacement', function () {
 	$reporter = new MemoryReporter($file);
 	$content = FileContent::fromFile($file);
 
-	$rule = new Rules\Nette\NetteObjectRule;
+	$rule = new Rules\Nette\NetteObjectRule(NULL);
 	$rule->processContent($content, $reporter);
 
 	Assert::same([
