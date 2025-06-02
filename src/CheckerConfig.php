@@ -152,9 +152,9 @@
 		}
 
 
-		public function setPhpVersion(Version $phpVersion): self
+		public function setPhpVersion(Version $phpVersion, bool $override = FALSE): self
 		{
-			if ($this->phpVersion !== NULL) {
+			if (!$override && $this->phpVersion !== NULL) {
 				throw new \RuntimeException('PhpVersion is already set.');
 			}
 
