@@ -214,7 +214,7 @@
 				}
 			}
 
-			if (isset($yaml['jobs']['static-analysis']['with'])) {
+			if (isset($yaml['jobs']['static-analysis'])) {
 				$yaml['jobs']['static-analysis']['with']['phpVersions'] = $this->formatPhpVersions(new Version('7.2.0'));
 			}
 
