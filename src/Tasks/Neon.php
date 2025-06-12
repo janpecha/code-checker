@@ -5,7 +5,7 @@
 	namespace JP\CodeChecker\Tasks;
 
 	use JP\CodeChecker\CheckerConfig;
-	use JP\CodeChecker\Result;
+	use JP\CodeChecker\Rules\Neon\NeonKeywordsRule;
 
 
 	class Neon
@@ -13,21 +13,7 @@
 		public static function configure(CheckerConfig $config): void
 		{
 			$tasks = \Nette\CodeChecker\Tasks::class;
-			$config->addTask([self::class, 'keywordsFixer'], '*.neon');
+			$config->addRule(new NeonKeywordsRule);
 			$config->addTask([$tasks, 'neonSyntaxChecker'], '*.neon');
-		}
-
-
-		public static function keywordsFixer(string &$contents, Result $result): void
-		{
-			Helpers::findAndReplaces(
-				$contents,
-				$result,
-				[
-					'#(:\\s)on$#m' => '$1yes',
-					'#(:\\s)off$#m' => '$1no',
-				],
-				'Neon: keywords on/off changed to yes/no (deprecated in v3.1)'
-			);
 		}
 	}
