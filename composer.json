@@ -21,7 +21,7 @@
 		"composer/semver": "^3.4"
 	},
 	"require-dev": {
-		"nette/tester": "^2.4"
+		"nette/tester": "^2.5"
 	},
 	"autoload": {
 		"classmap": ["src/"]
