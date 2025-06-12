@@ -24,6 +24,7 @@
 		public static $ignore = [
 			'.git', '.svn', '.idea', '*.tmp', 'tmp', 'temp', 'log', 'vendor', 'node_modules', 'bower_components',
 			'*.min.js', 'package.json', 'package-lock.json',
+			'.claude',
 		];
 
 
