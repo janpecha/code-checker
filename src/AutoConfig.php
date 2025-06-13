@@ -22,9 +22,7 @@
 				Extensions\NetteApplicationExtension::configure($config, $composerVersions->getVersion('nette/application'));
 			}
 
-			if ($composerVersions->hasPackage('nette/neon')) {
-				Tasks\Neon::configure($config);
-			}
+			Rules\Neon\NeonRules::create($config);
 
 			if ($composerVersions->hasPackage('latte/latte')) {
 				Extensions\LatteExtension::configure($config, $composerVersions->getVersion('latte/latte'));
