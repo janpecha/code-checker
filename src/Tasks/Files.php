@@ -5,6 +5,7 @@
 	namespace JP\CodeChecker\Tasks;
 
 	use JP\CodeChecker\CheckerConfig;
+	use JP\CodeChecker\Rules;
 
 
 	class Files
@@ -12,7 +13,7 @@
 		public static function configure(CheckerConfig $config): void
 		{
 			$tasks = \Nette\CodeChecker\Tasks::class;
-			$config->addTask([$tasks, 'controlCharactersChecker']);
+			$config->addRule(new Rules\Files\ControlCharactersRule);
 			$config->addTask([$tasks, 'bomFixer']);
 			$config->addTask([$tasks, 'utf8Checker']);
 			$config->addTask([$tasks, 'newlineNormalizer'], '!*.sh');

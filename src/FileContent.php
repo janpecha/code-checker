@@ -96,6 +96,12 @@
 		}
 
 
+		public function convertOffsetToLine(int $offset): int
+		{
+			return $offset ? substr_count($this->contents, "\n", 0, $offset) + 1 : 1;
+		}
+
+
 		public function __toString()
 		{
 			return $this->contents;
