@@ -97,7 +97,7 @@
 			foreach ($classesToProcess as $phpClass) {
 				$engine->progress();
 
-				if (!$filesReflection->isSubclassOf($phpClass, \Nette\Application\UI\Presenter::class)) {
+				if (!$filesReflection->isSubclassOf($phpClass, \Nette\Application\UI\Presenter::class)) { // @phpstan-ignore class.notFound
 					continue;
 				}
 
@@ -156,7 +156,7 @@
 			foreach ($classesToProcess as $phpClass) {
 				$engine->progress();
 
-				if (!$filesReflection->isSubclassOf($phpClass, \Nette\Application\UI\Presenter::class)) {
+				if (!$filesReflection->isSubclassOf($phpClass, \Nette\Application\UI\Presenter::class)) { // @phpstan-ignore class.notFound
 					continue;
 				}
 

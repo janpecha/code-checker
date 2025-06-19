@@ -66,7 +66,7 @@
 			}
 
 			if (count($tasks) > 0) {
-				$extensions[] = new Extensions\TasksExtension(self::$accept, $tasks);
+				$extensions[] = new Extensions\TasksExtension($tasks);
 			}
 
 			if (count($extensions) === 0) {

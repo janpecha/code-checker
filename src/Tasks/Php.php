@@ -14,7 +14,7 @@
 			$phpVersion = $config->getPhpVersion();
 			$params = $config->getParameters();
 
-			$tasks = \Nette\CodeChecker\Tasks::class;
+			$tasks = Tasks::class;
 			$config->addTask([$tasks, 'phpSyntaxChecker'], '*.php,*.phpt');
 			$config->addTask([$tasks, 'invalidPhpDocChecker'], '*.php,*.phpt');
 			$config->addTask([$tasks, 'invalidDoubleQuotedStringChecker'], '*.php,*.phpt');

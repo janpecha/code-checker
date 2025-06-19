@@ -12,7 +12,7 @@
 	{
 		public static function configure(CheckerConfig $config): void
 		{
-			$tasks = \Nette\CodeChecker\Tasks::class;
+			$tasks = Tasks::class;
 			$config->addRule(new Rules\Files\ControlCharactersRule);
 			$config->addTask([$tasks, 'bomFixer']);
 			$config->addTask([$tasks, 'utf8Checker']);

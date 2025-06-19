@@ -11,14 +11,16 @@
 	],
 	"require": {
 		"php": "8.2 - 8.4",
-		"nette/code-checker": "^3.2",
 		"czproject/assert": "^1.4",
 		"czproject/path-helper": "^4.1",
 		"czproject/git-php": "^4.0",
 		"czproject/php-simple-ast": "^1.2",
 		"symfony/yaml": "^7.0",
 		"nette/utils": "^3.1",
-		"composer/semver": "^3.4"
+		"composer/semver": "^3.4",
+		"nette/command-line": "^1.8",
+		"nette/neon": "^3.4",
+		"latte/latte": "^3.0"
 	},
 	"require-dev": {
 		"nette/tester": "^2.5"

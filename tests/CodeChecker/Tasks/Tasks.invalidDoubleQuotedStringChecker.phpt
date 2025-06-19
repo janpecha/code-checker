@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types=1);
+
+use JP\CodeChecker\File;
+use JP\CodeChecker\ResultMessage;
+use JP\CodeChecker\ResultType;
+use JP\CodeChecker\Tasks\Tasks;
+use Tester\Assert;
+
+require __DIR__ . '/../../bootstrap.php';
+
+
+test('Valid', function () {
+	$file = new File('file.php', '<?php $a = "\x10"');
+	Tasks::invalidDoubleQuotedStringChecker($file);
+	Assert::equal([], $file->getResult());
+});
+
+test('Invalid', function () {
+	$file = new File('file.php', '<?php $a = "\X10"');
+	Tasks::invalidDoubleQuotedStringChecker($file);
+	Assert::equal([
+		new ResultMessage(ResultType::Warning, 'Invalid escape sequence \X in double quoted string', 1),
+	], $file->getResult());
+});

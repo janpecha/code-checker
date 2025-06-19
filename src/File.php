@@ -64,6 +64,12 @@
 		}
 
 
+		public function report(ResultMessage $message): void
+		{
+			$this->result[] = $message;
+		}
+
+
 		public function reportFix(string $message, ?int $line = null): void
 		{
 			$this->result[] = new ResultMessage(
