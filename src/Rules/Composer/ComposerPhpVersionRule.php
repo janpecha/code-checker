@@ -2,14 +2,16 @@
 
 	declare(strict_types=1);
 
-	namespace JP\CodeChecker\Extensions;
+	namespace JP\CodeChecker\Rules\Composer;
 
-	use JP\CodeChecker;
-	use JP\CodeChecker\FileContent;
+	use JP\CodeChecker\CheckerConfig;
+	use JP\CodeChecker\File;
+	use JP\CodeChecker\CommitMessage;
+	use JP\CodeChecker\Rules\FileRule;
 	use JP\CodeChecker\Version;
 
 
-	class ComposerExtension implements CodeChecker\Extension
+	class ComposerPhpVersionRule implements FileRule
 	{
 		private string $composerFile;
 		private Version $minimalPhpVersion;
@@ -28,49 +30,33 @@
 		}
 
 
-		public function run(CodeChecker\Engine $engine): void
+		public function getCommitMessage(): ?CommitMessage
 		{
-			$this->processComposerFile($engine);
+			return new CommitMessage('Composer: updated required PHP version');
 		}
 
 
-		public function createRules(): array
+		public function processFile(File $file): void
 		{
-			return [];
-		}
+			if ($file->getPath() !== $this->composerFile) {
+				return;
+			}
 
-
-		public function createProcessors(array $rules): array
-		{
-			return [];
-		}
-
-
-		private function processComposerFile(CodeChecker\Engine $engine): void
-		{
 			$minimalPhpVersion = $this->minimalPhpVersion->toMinorString();
 			$maximalPhpVersion = $this->maximalPhpVersion->toMinorString();
 
-			$contents = FileContent::fromFile($this->composerFile);
-			$contents->findAndReplace(
+			$file->findAndReplace(
 				'/^(\\s*"php"\\s*:\\s*")[^"]+(",?)$/m',
 				'${1}' . $minimalPhpVersion . ' - ' . $maximalPhpVersion . '$2',
-				$engine,
 				'Updated required PHP version range'
 			);
-
-			$engine->writeFile(new \SplFileInfo($this->composerFile), (string) $contents);
-
-			if ($contents->wasChanged()) {
-				$engine->commit('Composer: updated required PHP version');
-			}
 		}
 
 
-		public static function configure(CodeChecker\CheckerConfig $config): void
+		public static function configure(CheckerConfig $config): void
 		{
 			if ($config->getComposerFile()->isLibrary()) {
-				$config->addExtension(new self(
+				$config->addRule(new self(
 					$config->getComposerFile()->getPath(),
 					$config->getPhpVersion(),
 					$config->getMaxPhpVersion()

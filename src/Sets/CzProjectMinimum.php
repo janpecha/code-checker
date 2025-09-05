@@ -6,6 +6,7 @@
 
 	use JP\CodeChecker\CheckerConfig;
 	use JP\CodeChecker\Extensions;
+	use JP\CodeChecker\Rules;
 	use JP\CodeChecker\Version;
 
 
@@ -27,7 +28,7 @@
 			\JP\CodeChecker\AutoConfig::configure($config);
 			Extensions\JanpechaActionsExtension::configure($config);
 			Extensions\JanpechaReadmeExtension::configure($config);
-			Extensions\ComposerExtension::configure($config);
+			Rules\Composer\ComposerPhpVersionRule::configure($config);
 
 			if ($composerVersions->hasPackage('nette/application')) {
 				Extensions\JanpechaNetteExtension::configure($config);
