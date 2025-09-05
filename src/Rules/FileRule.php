@@ -5,14 +5,12 @@
 	namespace JP\CodeChecker\Rules;
 
 	use JP\CodeChecker\File;
-	use JP\CodeChecker\PhpTokens;
 	use JP\CodeChecker\Rule;
 
 
-	interface PhpTokensRule extends Rule
+	interface FileRule extends Rule
 	{
-		function processPhpTokens(
-			File $file,
-			PhpTokens $tokens
+		function processFile(
+			File $file
 		): void;
 	}

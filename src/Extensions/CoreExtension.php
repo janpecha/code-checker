@@ -5,8 +5,8 @@
 	namespace JP\CodeChecker\Extensions;
 
 	use JP\CodeChecker;
-	use JP\CodeChecker\Processors\FileContentProcessor;
-	use JP\CodeChecker\Rules\FileContentRule;
+	use JP\CodeChecker\Processors\FileProcessor;
+	use JP\CodeChecker\Rules\FileRule;
 
 
 	class CoreExtension implements CodeChecker\Extension
@@ -27,14 +27,14 @@
 			$filteredRules = [];
 
 			foreach ($rules as $rule) {
-				if ($rule instanceof FileContentRule) {
+				if ($rule instanceof FileRule) {
 					$filteredRules[] = $rule;
 				}
 			}
 
 			if (count($filteredRules) > 0) {
 				return [
-					new FileContentProcessor($filteredRules),
+					new FileProcessor($filteredRules),
 				];
 			}
 

@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-use JP\CodeChecker\FileContent;
+use JP\CodeChecker\File;
 use JP\CodeChecker\MemoryReporter;
+use JP\CodeChecker\ResultMessage;
+use JP\CodeChecker\ResultType;
 use JP\CodeChecker\Rules\Neon\NeonSyntaxRule;
 use Tester\Assert;
 
@@ -11,23 +13,20 @@ require __DIR__ . '/../../../bootstrap.php';
 
 
 test('valid syntax', function () {
-	$reporter = new MemoryReporter;
 	$rule = new NeonSyntaxRule;
-	$content = new FileContent('test.neon', 'a: b');
-	$rule->processContent($content, $reporter);
+	$file = new File('test.neon', 'a: b');
+	$rule->processFile($file);
 
-	Assert::same([
-	], $reporter->getMessages());
+	Assert::same([], $file->getResult());
 });
 
 
 test('invalid syntax', function () {
-	$reporter = new MemoryReporter;
 	$rule = new NeonSyntaxRule;
-	$content = new FileContent('test.neon', 'a: b: c');
-	$rule->processContent($content, $reporter);
+	$file = new File('test.neon', 'a: b: c');
+	$rule->processFile($file);
 
-	Assert::same([
-		'ERROR | /test.neon:1 | Unexpected \':\' on line 1, column 5.',
-	], $reporter->getMessages());
+	Assert::equal([
+		new ResultMessage(ResultType::Error, 'Unexpected \':\' on line 1, column 5.', 1),
+	], $file->getResult());
 });

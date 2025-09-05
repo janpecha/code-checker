@@ -10,8 +10,5 @@
 		function getCommitMessage(): ?CommitMessage;
 
 
-		function processContent(
-			FileContent $fileContent,
-			Reporter $reporter
-		): void;
+		function processFile(File $file): void;
 	}

@@ -137,7 +137,7 @@
 
 
 		/**
-		 * @param  string|\SplFileInfo $path
+		 * @param  string|\SplFileInfo|File $path
 		 */
 		public function existsFile($path): bool
 		{
@@ -146,7 +146,7 @@
 
 
 		/**
-		 * @param  string|\SplFileInfo $path
+		 * @param  string|\SplFileInfo|File $path
 		 */
 		public function readFile($path): string
 		{
@@ -155,7 +155,7 @@
 
 
 		/**
-		 * @param  string|\SplFileInfo $path
+		 * @param  string|\SplFileInfo|File $path
 		 */
 		public function writeFile($path, string $content): void
 		{
@@ -171,8 +171,8 @@
 
 
 		/**
-		 * @param  string|\SplFileInfo $old
-		 * @param  string|\SplFileInfo $new
+		 * @param  string|\SplFileInfo|File $old
+		 * @param  string|\SplFileInfo|File $new
 		 */
 		public function renameFile($old, $new): void
 		{
@@ -190,7 +190,7 @@
 
 
 		/**
-		 * @param  string|\SplFileInfo $path
+		 * @param  string|\SplFileInfo|File $path
 		 */
 		public function deleteFile($path): void
 		{
@@ -306,12 +306,15 @@
 
 
 		/**
-		 * @param  string|\SplFileInfo $path
+		 * @param  string|\SplFileInfo|File $path
 		 */
 		private function path($path): string
 		{
 			if ($path instanceof \SplFileInfo) {
 				return $path->getRealPath();
+
+			} elseif ($path instanceof File) {
+				return $path->getPath();
 			}
 
 			return $this->projectDirectory . '/' . $path;

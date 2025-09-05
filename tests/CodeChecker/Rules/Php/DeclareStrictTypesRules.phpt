@@ -2,76 +2,72 @@
 
 declare(strict_types=1);
 
-use JP\CodeChecker\FileContent;
-use JP\CodeChecker\MemoryReporter;
+use JP\CodeChecker\File;
+use JP\CodeChecker\ResultMessage;
+use JP\CodeChecker\ResultType;
 use JP\CodeChecker\Rules;
-use JP\CodeChecker\Result;
 use Tester\Assert;
 
 require __DIR__ . '/../../../bootstrap.php';
 
 
 test('No fix', function () {
-	$reporter = new MemoryReporter;
-	$content = new FileContent('test.php', '<?php declare(strict_types=1)');
+	$file = new File('test.php', '<?php declare(strict_types=1)');
 	$rule = new Rules\Php\DeclareStrictTypesRule;
-	$rule->processContent($content, $reporter);
+	$rule->processFile($file);
 	Assert::same([
-	], $reporter->getMessages());
+	], $file->getResult());
 });
 
 
 test('Fix no indentation', function () {
-	$reporter = new MemoryReporter;
-	$content = new FileContent('test.php', implode("\n", [
+	$file = new File('test.php', implode("\n", [
 		'<?php',
 		'namespace Foo;',
 	]));
 	$rule = new Rules\Php\DeclareStrictTypesRule;
-	$rule->processContent($content, $reporter);
-	Assert::same([
-		'FIX   | /test.php | Missing declare(strict_types=1)',
-	], $reporter->getMessages());
+	$rule->processFile($file);
+	Assert::equal([
+		new ResultMessage(ResultType::Fix, 'Missing declare(strict_types=1)'),
+	], $file->getResult());
 	Assert::same(implode("\n", [
 		'<?php',
 		'',
 		'declare(strict_types=1);',
 		'namespace Foo;',
-	]), $content->contents);
+	]), $file->contents);
 });
 
 
 test('Fix no indentation', function () {
-	$reporter = new MemoryReporter;
-	$content = new FileContent('test.php', implode("\n", [
+	$file = new File('test.php', implode("\n", [
 		'<?php',
 		'',
 		"\t\tnamespace Foo;",
 	]));
 	$rule = new Rules\Php\DeclareStrictTypesRule;
-	$rule->processContent($content, $reporter);
-	Assert::same([
-		'FIX   | /test.php | Missing declare(strict_types=1)',
-	], $reporter->getMessages());
+	$rule->processFile($file);
+	Assert::equal([
+		new ResultMessage(ResultType::Fix, 'Missing declare(strict_types=1)'),
+	], $file->getResult());
 	Assert::same(implode("\n", [
 		'<?php',
 		'',
 		"\t\tdeclare(strict_types=1);",
 		'',
 		"\t\tnamespace Foo;",
-	]), $content->contents);
+	]), $file->contents);
 });
 
 
 test('Multiple declares (invalid)', function () {
-	$reporter = new MemoryReporter;
-	$content = new FileContent('test.php', implode("\n", [
+	$file = new File('test.php', implode("\n", [
 		'<?php',
 		'declare(strict_types=1);',
 		'declare(strict_types=1);',
 		"\t\tnamespace Foo;",
 	]));
 	$rule = new Rules\Php\DeclareStrictTypesRule;
-	$rule->processContent($content, $reporter);
-	Assert::same([], $reporter->getMessages());
+	$rule->processFile($file);
+	Assert::same([], $file->getResult());
 });

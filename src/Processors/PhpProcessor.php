@@ -5,10 +5,9 @@
 	namespace JP\CodeChecker\Processors;
 
 	use JP\CodeChecker\CommitMessage;
-	use JP\CodeChecker\FileContent;
+	use JP\CodeChecker\File;
 	use JP\CodeChecker\PhpTokens;
 	use JP\CodeChecker\Processor;
-	use JP\CodeChecker\Reporter;
 	use JP\CodeChecker\Rules\PhpTokensRule;
 
 
@@ -47,21 +46,21 @@
 		}
 
 
-		public function processContent(FileContent $fileContent, Reporter $reporter): void
+		public function processFile(File $file): void
 		{
-			if (!$fileContent->matchName($this->acceptMasks)) {
+			if (!$file->matchName($this->acceptMasks)) {
 				return;
 			}
 
-			$tokens = PhpTokens::fromString($fileContent->contents);
+			$tokens = PhpTokens::fromString($file->contents);
 
 			foreach ($this->tokensRules as $tokensRule) {
 				$tokensRule->processPhpTokens(
-					$tokens,
-					$reporter
+					$file,
+					$tokens
 				);
 			}
 
-			$fileContent->contents = (string) $tokens;
+			$file->contents = (string) $tokens;
 		}
 	}

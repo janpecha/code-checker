@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-use JP\CodeChecker\FileContent;
-use JP\CodeChecker\MemoryReporter;
+use JP\CodeChecker\File;
+use JP\CodeChecker\ResultMessage;
+use JP\CodeChecker\ResultType;
 use JP\CodeChecker\Rules\Files\ControlCharactersRule;
 use Tester\Assert;
 
@@ -11,21 +12,19 @@ require __DIR__ . '/../../../bootstrap.php';
 
 
 test('Valid', function () {
-	$reporter = new MemoryReporter;
 	$rule = new ControlCharactersRule;
-	$content = new FileContent('test.txt', " \t \n \r");
-	$rule->processContent($content, $reporter);
-	Assert::same([], $reporter->getMessages());
+	$file = new File('test.txt', " \t \n \r");
+	$rule->processFile($file);
+	Assert::same([], $file->getResult());
 });
 
 
 
 test('Invalid', function () {
-	$reporter = new MemoryReporter;
 	$rule = new ControlCharactersRule;
-	$content = new FileContent('test.txt', "\x00");
-	$rule->processContent($content, $reporter);
-	Assert::same([
-		'ERROR | test.txt:1 | Contains control characters',
-	], $reporter->getMessages());
+	$file = new File('test.txt', "\x00");
+	$rule->processFile($file);
+	Assert::equal([
+		new ResultMessage(ResultType::Error, 'Contains control characters', 1),
+	], $file->getResult());
 });

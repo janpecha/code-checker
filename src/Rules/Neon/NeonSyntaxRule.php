@@ -5,12 +5,11 @@
 	namespace JP\CodeChecker\Rules\Neon;
 
 	use JP\CodeChecker\CommitMessage;
-	use JP\CodeChecker\FileContent;
-	use JP\CodeChecker\Reporter;
-	use JP\CodeChecker\Rules\FileContentRule;
+	use JP\CodeChecker\File;
+	use JP\CodeChecker\Rules\FileRule;
 
 
-	class NeonSyntaxRule implements FileContentRule
+	class NeonSyntaxRule implements FileRule
 	{
 		/** @var list<non-empty-string>|NULL */
 		private ?array $acceptMasks;
@@ -31,21 +30,20 @@
 		}
 
 
-		public function processContent(
-			FileContent $fileContent,
-			Reporter $reporter
+		public function processFile(
+			File $file
 		): void
 		{
-			if ($this->acceptMasks !== NULL && !$fileContent->matchName($this->acceptMasks)) {
+			if ($this->acceptMasks !== NULL && !$file->matchName($this->acceptMasks)) {
 				return;
 			}
 
 			try {
-				\Nette\Neon\Neon::decode($fileContent->contents);
+				\Nette\Neon\Neon::decode($file->contents);
 
 			} catch (\Nette\Neon\Exception $e) {
 				$line = preg_match('# on line (\d+)#', $e->getMessage(), $m) ? (int) $m[1] : null;
-				$reporter->reportErrorInFile($e->getMessage(), $fileContent->getFile(), $line);
+				$file->reportError($e->getMessage(), $line);
 			}
 		}
 	}

@@ -158,7 +158,7 @@
 						$progressBar->progress();
 						$this->processFile(
 							$engine,
-							$file,
+							(string) $file,
 							[$processor]
 						);
 					}
@@ -179,7 +179,7 @@
 					$progressBar->progress();
 					$this->processFile(
 						$engine,
-						$file,
+						(string) $file,
 						$processors
 					);
 				}
@@ -203,21 +203,45 @@
 		 */
 		private function processFile(
 			Engine $engine,
-			\SplFileInfo $file,
+			string $path,
 			array $processors
 		): void
 		{
-			$content = FileContent::fromFile((string) $file);
+			$file = File::fromFile($path);
 
 			foreach ($processors as $processor) {
-				$processor->processContent(
-					$content,
-					$engine
-				);
+				$processor->processFile($file);
 			}
 
-			if ($content->wasChanged()) {
-				$engine->writeFile($file, (string) $content);
+			foreach ($file->getResult() as $resultMessage) {
+				if ($resultMessage->type === ResultType::Fix) {
+					$engine->reportFixInFile(
+						$resultMessage->message,
+						$path,
+						$resultMessage->line
+					);
+
+				} elseif ($resultMessage->type === ResultType::Error) {
+					$engine->reportErrorInFile(
+						$resultMessage->message,
+						$path,
+						$resultMessage->line
+					);
+
+				} elseif ($resultMessage->type === ResultType::Warning) {
+					$engine->reportWarningInFile(
+						$resultMessage->message,
+						$path,
+						$resultMessage->line
+					);
+
+				} else {
+					throw new \RuntimeException("Unknow message type.");
+				}
+			}
+
+			if ($file->wasChanged()) {
+				$engine->writeFile($file, (string) $file);
 			}
 		}
 

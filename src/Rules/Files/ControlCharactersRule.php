@@ -5,13 +5,12 @@
 	namespace JP\CodeChecker\Rules\Files;
 
 	use JP\CodeChecker\CommitMessage;
-	use JP\CodeChecker\FileContent;
-	use JP\CodeChecker\Reporter;
-	use JP\CodeChecker\Rules\FileContentRule;
+	use JP\CodeChecker\File;
+	use JP\CodeChecker\Rules\FileRule;
 	use Nette\Utils\Strings;
 
 
-	class ControlCharactersRule implements FileContentRule
+	class ControlCharactersRule implements FileRule
 	{
 		/** @var list<non-empty-string>|NULL */
 		private ?array $acceptMasks;
@@ -32,17 +31,17 @@
 		}
 
 
-		public function processContent(
-			FileContent $fileContent,
-			Reporter $reporter
+		public function processFile(
+			File $file
 		): void
 		{
-			if ($this->acceptMasks !== NULL && !$fileContent->matchName($this->acceptMasks)) {
+			if ($this->acceptMasks !== NULL && !$file->matchName($this->acceptMasks)) {
 				return;
 			}
 
-			if ($m = Strings::match($fileContent->contents, '#[\x00-\x08\x0B\x0C\x0E-\x1F]#', PREG_OFFSET_CAPTURE)) {
-				$reporter->reportErrorInFile('Contains control characters', $fileContent->convertOffsetToLine($m[0][1]));
+			if ($m = Strings::match($file->contents, '#[\x00-\x08\x0B\x0C\x0E-\x1F]#', PREG_OFFSET_CAPTURE)) {
+				assert(is_array($m[0]) && is_int($m[0][1]));
+				$file->reportError('Contains control characters', $file->convertOffsetToLine($m[0][1]));
 			}
 		}
 	}

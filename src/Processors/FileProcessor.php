@@ -5,20 +5,19 @@
 	namespace JP\CodeChecker\Processors;
 
 	use JP\CodeChecker\CommitMessage;
-	use JP\CodeChecker\FileContent;
+	use JP\CodeChecker\File;
 	use JP\CodeChecker\Processor;
-	use JP\CodeChecker\Reporter;
-	use JP\CodeChecker\Rules\FileContentRule;
+	use JP\CodeChecker\Rules\FileRule;
 
 
-	class FileContentProcessor implements Processor
+	class FileProcessor implements Processor
 	{
-		/** @var FileContentRule[] */
+		/** @var FileRule[] */
 		private array $rules;
 
 
 		/**
-		 * @param FileContentRule[] $rules
+		 * @param FileRule[] $rules
 		 */
 		public function __construct(array $rules)
 		{
@@ -38,13 +37,10 @@
 		}
 
 
-		public function processContent(FileContent $fileContent, Reporter $reporter): void
+		public function processFile(File $file): void
 		{
 			foreach ($this->rules as $rule) {
-				$rule->processContent(
-					$fileContent,
-					$reporter
-				);
+				$rule->processFile($file);
 			}
 		}
 	}
