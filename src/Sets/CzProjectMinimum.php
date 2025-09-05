@@ -27,7 +27,7 @@
 
 			\JP\CodeChecker\AutoConfig::configure($config);
 			Extensions\JanpechaActionsExtension::configure($config);
-			Extensions\JanpechaReadmeExtension::configure($config);
+			Rules\Files\JanpechaReadmeRule::configure($config);
 			Rules\Composer\ComposerPhpVersionRule::configure($config);
 
 			if ($composerVersions->hasPackage('nette/application')) {
