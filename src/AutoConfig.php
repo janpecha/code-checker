@@ -25,7 +25,7 @@
 			Rules\Neon\NeonRules::create($config);
 
 			if ($composerVersions->hasPackage('latte/latte')) {
-				Extensions\LatteExtension::configure($config, $composerVersions->getVersion('latte/latte'));
+				Rules\Latte\LatteDeprecatedRule::configure($config, $composerVersions->getVersion('latte/latte'));
 			}
 		}
 	}
