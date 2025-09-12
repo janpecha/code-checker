@@ -23,6 +23,8 @@
 				$rules[] = new DeclareStrictTypesRule;
 			}
 
+			$rules[] = new PhpDocParamFixerRule;
+
 			return $rules;
 		}
 	}
