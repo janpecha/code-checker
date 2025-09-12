@@ -11,12 +11,12 @@
 	],
 	"require": {
 		"php": "8.2 - 8.4",
-		"czproject/assert": "^1.4",
+		"czproject/assert": "^2.0",
 		"czproject/path-helper": "^4.1",
 		"czproject/git-php": "^4.0",
-		"czproject/php-simple-ast": "^1.2",
+		"czproject/php-simple-ast": "^1.5",
 		"symfony/yaml": "^7.0",
-		"nette/utils": "^3.1",
+		"nette/utils": "^4.0",
 		"composer/semver": "^3.4",
 		"nette/command-line": "^1.8",
 		"nette/neon": "^3.4"
