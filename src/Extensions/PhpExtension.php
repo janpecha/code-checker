@@ -7,6 +7,7 @@
 	use JP\CodeChecker\Engine;
 	use JP\CodeChecker\Extension;
 	use JP\CodeChecker\Processors\PhpProcessor;
+	use JP\CodeChecker\Rules\PhpReflectionRule;
 	use JP\CodeChecker\Rules\PhpTokensRule;
 
 
@@ -41,18 +42,24 @@
 		public function createProcessors(array $rules): array
 		{
 			$tokensRules = [];
+			$reflectionRules = [];
 
 			foreach ($rules as $rule) {
 				if ($rule instanceof PhpTokensRule) {
 					$tokensRules[] = $rule;
 				}
+
+				if ($rule instanceof PhpReflectionRule) {
+					$reflectionRules[] = $rule;
+				}
 			}
 
-			if (count($tokensRules) > 0) {
+			if (count($tokensRules) > 0 || count($reflectionRules) > 0) {
 				return [
 					new PhpProcessor(
 						$this->acceptMasks,
 						$tokensRules,
+						$reflectionRules,
 					),
 				];
 			}
