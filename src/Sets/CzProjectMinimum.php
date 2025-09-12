@@ -23,15 +23,11 @@
 				}
 			}
 
-			$composerVersions = $config->getComposerVersions();
-
 			\JP\CodeChecker\AutoConfig::configure($config);
 			Extensions\JanpechaActionsExtension::configure($config);
 			Rules\Files\JanpechaReadmeRule::configure($config);
 			Rules\Composer\ComposerPhpVersionRule::configure($config);
-
-			if ($composerVersions->hasPackage('nette/application')) {
-				Extensions\JanpechaNetteExtension::configure($config);
-			}
+			Rules\Nette\JanpechaErrorPresenterTerminateRule::configure($config);
+			Rules\Nette\JanpechaErrorPresenterThrowableRule::configure($config);
 		}
 	}
