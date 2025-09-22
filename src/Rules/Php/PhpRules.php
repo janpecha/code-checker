@@ -25,6 +25,10 @@
 
 			$rules[] = new PhpDocParamFixerRule;
 
+			if ($phpVersion->isEqualOrGreater('7.1.0')) {
+				$rules[] = new PhpNullableParameterFixerRule;
+			}
+
 			return $rules;
 		}
 	}
