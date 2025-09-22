@@ -4,6 +4,8 @@
 
 	namespace JP\CodeChecker;
 
+	use Nette\Utils\Strings;
+
 
 	class CheckerConfig
 	{
@@ -225,7 +227,11 @@
 
 		public function addIgnore(string $ignore): self
 		{
-			$this->ignore[] = $ignore;
+			if (Strings::startsWith($ignore, '/')) {
+				$ignore = '.' . $ignore; // /path => ./path
+			}
+
+			$this->ignore[] = rtrim($ignore, '/');
 			return $this;
 		}
 

@@ -227,7 +227,6 @@
 					: \Nette\Utils\Finder::findFiles(...$masks)
 						->exclude(...$this->ignore)
 						->from($path)
-						->exclude(...$this->ignore)
 						->getIterator()
 				);
 			}
