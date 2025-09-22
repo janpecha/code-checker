@@ -40,7 +40,6 @@
 			}
 
 			if ($m = Strings::match($file->contents, '#[\x00-\x08\x0B\x0C\x0E-\x1F]#', PREG_OFFSET_CAPTURE)) {
-				assert(is_array($m[0]) && is_int($m[0][1]));
 				$file->reportError('Contains control characters', $file->convertOffsetToLine($m[0][1]));
 			}
 		}

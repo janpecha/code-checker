@@ -19,12 +19,6 @@ parameters:
 			path: src/CheckerFactory.php
 
 		-
-			message: '#^Call to function is_array\(\) with non\-empty\-array will always evaluate to true\.$#'
-			identifier: function.alreadyNarrowedType
-			count: 4
-			path: src/ComposerFile.php
-
-		-
 			message: '#^Method JP\\CodeChecker\\ComposerFile\:\:getLicense\(\) should return array\<string\> but returns array\<mixed\>\.$#'
 			identifier: return.type
 			count: 1
@@ -101,45 +95,3 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: src/Extensions/JanpechaActionsExtension.php
-
-		-
-			message: '#^Cannot use array destructuring on mixed\.$#'
-			identifier: offsetAccess.nonArray
-			count: 1
-			path: src/Extensions/TasksExtension.php
-
-		-
-			message: '#^Parameter \#1 \$message of method JP\\CodeChecker\\Engine\:\:reportErrorInFile\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Extensions/TasksExtension.php
-
-		-
-			message: '#^Parameter \#1 \$message of method JP\\CodeChecker\\Engine\:\:reportFixInFile\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Extensions/TasksExtension.php
-
-		-
-			message: '#^Parameter \#1 \$message of method JP\\CodeChecker\\Engine\:\:reportWarningInFile\(\) expects string, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Extensions/TasksExtension.php
-
-		-
-			message: '#^Parameter \#3 \$line of method JP\\CodeChecker\\Engine\:\:reportErrorInFile\(\) expects int\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Extensions/TasksExtension.php
-
-		-
-			message: '#^Parameter \#3 \$line of method JP\\CodeChecker\\Engine\:\:reportFixInFile\(\) expects int\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Extensions/TasksExtension.php
-
-		-
-			message: '#^Parameter \#3 \$line of method JP\\CodeChecker\\Engine\:\:reportWarningInFile\(\) expects int\|null, mixed given\.$#'
-			identifier: argument.type
-			count: 1
-			path: src/Extensions/TasksExtension.php

@@ -27,5 +27,10 @@
 	},
 	"autoload": {
 		"classmap": ["src/"]
+	},
+	"extra": {
+		"phpstan-extensions": [
+			"phpstan/phpstan-nette"
+		]
 	}
 }

@@ -38,7 +38,7 @@
 		{
 			if (!Strings::checkEncoding($file->contents)) {
 				preg_match('/^(?:[\xF0-\xF7][\x80-\xBF][\x80-\xBF][\x80-\xBF]|[\xE0-\xEF][\x80-\xBF][\x80-\xBF]|[\xC0-\xDF][\x80-\xBF]|[\x00-\x7f])*+/', $file->contents, $m);
-				$file->reportError('Is not valid UTF-8 file', self::offsetToLine($file->contents, strlen($m[0]) + 1));
+				$file->reportError('Is not valid UTF-8 file', isset($m[0]) ? self::offsetToLine($file->contents, strlen($m[0]) + 1) : NULL);
 			}
 		}
 
@@ -117,11 +117,11 @@
 		{
 			$prev = null;
 			foreach (@token_get_all($file->contents) as $token) { // @ can trigger error
-				if (($token[0] === T_ENCAPSED_AND_WHITESPACE && ($prev[0] !== T_START_HEREDOC || !strpos($prev[1], "'")))
+				if (($token[0] === T_ENCAPSED_AND_WHITESPACE && $prev !== NULL && ($prev[0] !== T_START_HEREDOC || !strpos($prev[1], "'")))
 					|| ($token[0] === T_CONSTANT_ENCAPSED_STRING && $token[1][0] === '"')
 				) {
 					$m = Strings::match($token[1], '#^([^\\\\]|\\\\[\\\\nrtvefxu0-7\W])*+#'); // more strict: '#^([^\\\\]|\\\\[\\\\nrtvefu$"x0-7])*+#'
-					if ($token[1] !== $m[0]) {
+					if (isset($m[0]) && $token[1] !== $m[0]) {
 						$file->reportWarning('Invalid escape sequence ' . substr($token[1], strlen($m[0]), 2) . ' in double quoted string', $token[2]);
 					}
 				}
@@ -134,7 +134,7 @@
 		{
 			$prev = null;
 			foreach (@token_get_all($file->contents) as $token) { // @ can trigger error
-				if (($token[0] === T_ENCAPSED_AND_WHITESPACE && $prev[0] !== T_START_HEREDOC
+				if (($token[0] === T_ENCAPSED_AND_WHITESPACE && $prev !== NULL && $prev[0] !== T_START_HEREDOC
 						|| $token[0] === T_CONSTANT_ENCAPSED_STRING)
 					&& strpos($token[1], "\n") !== false
 					&& (strpos($token[1], "\\'") !== false || strpos($token[1], '\\"') !== false)
@@ -190,7 +190,10 @@
 				$file->reportWarning('Unable to lint PHP code');
 				return;
 			}
-			$error = stream_get_contents($pipes[1]);
+			$error = '';
+			if (is_array($pipes) && is_resource($pipes[1])) {
+				$error = stream_get_contents($pipes[1]);
+			}
 			if (proc_close($process)) {
 				$error = strip_tags(explode("\n", $error)[1]);
 				$line = preg_match('# on line (\d+)$#', $error, $m) ? (int) $m[1] : null;
