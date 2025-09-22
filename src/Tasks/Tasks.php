@@ -202,30 +202,6 @@
 		}
 
 
-		public static function latteSyntaxChecker(File $file): void
-		{
-			$latte = new Latte\Engine;
-			$latte->setLoader(new Latte\Loaders\StringLoader);
-
-			try {
-				$code = $latte->compile($file->contents);
-				$fileToCheck = new File($file->getPath(), $code);
-				static::phpSyntaxChecker($fileToCheck);
-
-				foreach ($fileToCheck->getResult() as $message) {
-					$file->report($message);
-				}
-
-			} catch (Latte\CompileException $e) {
-				if (!preg_match('#Unknown (tag|macro|attribute)#A', $e->getMessage())) {
-					$file->reportError($e->getMessage(), $e->sourceLine);
-				} else {
-					$file->reportWarning($e->getMessage(), $e->sourceLine);
-				}
-			}
-		}
-
-
 		public static function neonSyntaxChecker(File $file): void
 		{
 			try {
