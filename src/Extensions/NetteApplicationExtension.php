@@ -43,14 +43,6 @@
 		{
 			$files = $engine->findFiles($this->fileMask);
 
-			if ($this->version->isEqualOrGreater('2.4.0')) {
-				$engine->processFiles(
-					$files,
-					[$this, 'fixHttpMethodsInPresenters'],
-					'Nette: replaced deprecated method isPost() by isMethod(\'POST\')'
-				);
-			}
-
 			$analyzedReflection = PhpReflection::scanFiles($files, $engine->progressHandler());
 			$classesToProcess = $analyzedReflection->getClasses();
 
@@ -73,17 +65,6 @@
 		public function createProcessors(array $rules): array
 		{
 			return [];
-		}
-
-
-		public function fixHttpMethodsInPresenters(FileContent $content, Reporter $reporter): void
-		{
-			$content->findAndReplace(
-				'#->isPost\\(\\)#m',
-				'->isMethod(\'POST\')',
-				$reporter,
-				'Nette: HTTP - method isPost() is deprecated, use isMethod(\'POST\') (deprecated in v2.4.0)'
-			);
 		}
 
 
