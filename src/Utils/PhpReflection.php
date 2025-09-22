@@ -45,25 +45,6 @@
 		}
 
 
-		public static function createFromFileContent(
-			PhpSimpleAst\AstParser $astParser,
-			\JP\CodeChecker\FileContent $fileContent
-		): PhpSimpleAst\Ast\PhpFile
-		{
-			try {
-				$code = $astParser->parseString($fileContent->contents);
-
-			} catch (PhpSimpleAst\InvalidStateException $e) {
-				throw new \RuntimeException("Parsing of file {$fileContent->getFile()} failed: " . $e->getMessage(), 0, $e);
-			}
-
-			return new PhpSimpleAst\Ast\PhpFile(
-				$fileContent->getFile(),
-				$code
-			);
-		}
-
-
 		public static function saveFiles(
 			\JP\CodeChecker\Engine $engine,
 			PhpSimpleAst\Reflection\FilesReflection $filesReflection
