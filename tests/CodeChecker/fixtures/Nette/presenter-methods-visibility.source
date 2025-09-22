@@ -1,0 +1,51 @@
+<?php
+
+	namespace MyApp\Presenters;
+
+
+	class TestPresenter extends \Nette\Application\UI\Presenter
+	{
+		private function actionDefault()
+		{
+		}
+
+
+		private function renderDefault()
+		{
+		}
+
+
+		private function handleAdd()
+		{
+		}
+
+
+		private function startup()
+		{
+		}
+
+
+		private function beforeRender()
+		{
+		}
+
+
+		private function afterRender()
+		{
+		}
+
+
+		private function shutdown()
+		{
+		}
+
+
+		private function createComponentFoo()
+		{
+		}
+
+
+		private function customMethod()
+		{
+		}
+	}

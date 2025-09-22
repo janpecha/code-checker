@@ -21,6 +21,7 @@
 			if ($composerVersions->hasPackage('nette/application')) {
 				Extensions\NetteApplicationExtension::configure($config, $composerVersions->getVersion('nette/application'));
 				Rules\Nette\NettePresenterHttpMethodsFixerRule::configure($config);
+				Rules\Nette\NettePresenterMethodsVisibilityRule::configure($config);
 			}
 
 			Rules\Neon\NeonRules::create($config);

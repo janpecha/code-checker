@@ -51,7 +51,6 @@
 				PhpReflection::scanFiles($engine->findScannedFiles($this->fileMask), $engine->progressHandler())->getFiles()
 			));
 
-			$this->fixPresenterMethodsVisibility($engine, $classesToProcess, $filesReflection);
 			$this->fixPresenterMethodsPhpDocReturnType($engine, $classesToProcess, $filesReflection);
 		}
 
@@ -65,64 +64,6 @@
 		public function createProcessors(array $rules): array
 		{
 			return [];
-		}
-
-
-		/**
-		 * @param  ClassReflection[] $classesToProcess
-		 */
-		private function fixPresenterMethodsVisibility(Engine $engine, array $classesToProcess, FilesReflection $filesReflection): void
-		{
-			$wasChanged = FALSE;
-
-			foreach ($classesToProcess as $phpClass) {
-				$engine->progress();
-
-				if (!$filesReflection->isSubclassOf($phpClass, \Nette\Application\UI\Presenter::class)) { // @phpstan-ignore class.notFound
-					continue;
-				}
-
-				foreach ($phpClass->getMethods() as $classMethod) {
-					$methodFixed = FALSE;
-					$methodName = Strings::lower($classMethod->getName());
-
-					if ($methodName !== 'action' && Strings::startsWith($methodName, 'action') && !$classMethod->isPublic()) {
-						$classMethod->setVisibilityToPublic();
-						$methodFixed = TRUE;
-
-					} elseif ($methodName !== 'render' && Strings::startsWith($methodName, 'render') && !$classMethod->isPublic()) {
-						$classMethod->setVisibilityToPublic();
-						$methodFixed = TRUE;
-
-					} elseif ($methodName !== 'handle' && Strings::startsWith($methodName, 'handle') && !$classMethod->isPublic()) {
-						$classMethod->setVisibilityToPublic();
-						$methodFixed = TRUE;
-
-					} elseif (($methodName === 'startup'
-						|| $methodName === 'beforerender'
-						|| $methodName === 'afterrender'
-						|| $methodName === 'shutdown'
-						) && !$classMethod->isProtected()
-					) {
-						$classMethod->setVisibilityToProtected();
-						$methodFixed = TRUE;
-
-					} elseif ($methodName !== 'createcomponent' && Strings::startsWith($methodName, 'createcomponent') && !$classMethod->isProtected()) {
-						$classMethod->setVisibilityToProtected();
-						$methodFixed = TRUE;
-					}
-
-					if ($methodFixed) {
-						$wasChanged = TRUE;
-						$engine->reportFixInFile('Nette: fixed visibility of ' . $classMethod->getFullName() . '()', PhpReflection::getFileName($phpClass));
-					}
-				}
-			}
-
-			if ($wasChanged) {
-				PhpReflection::saveFiles($engine, $filesReflection);
-				$engine->commit('Nette: fixed visibilities of presenters methods');
-			}
 		}
 
 
