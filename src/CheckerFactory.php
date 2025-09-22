@@ -58,7 +58,6 @@
 		{
 			$extensions = $config->getExtensions();
 			$paths = $config->getPaths();
-			$scannedPaths = $config->getScannedPaths();
 			$tasks = $config->getTasks();
 
 			if (count($paths) === 0) {
@@ -76,7 +75,6 @@
 			$checker = new Checker(
 				$config->getProjectDirectory(),
 				$paths,
-				$scannedPaths,
 				array_merge(self::$ignore, $config->getIgnore()),
 				$extensions,
 				new \CzProject\GitPhp\Git,
@@ -159,20 +157,6 @@
 						}
 
 						$checkerConfig->addPath($path);
-					}
-				}
-
-				if (isset($config['scannedPaths'])) {
-					if (!is_array($config['scannedPaths'])) {
-						throw new \RuntimeException("Option 'scannedPaths' must be array (config file '$configFile').");
-					}
-
-					foreach ($config['scannedPaths'] as $k => $scannedPaths) {
-						if (!is_string($scannedPaths)) {
-							throw new \RuntimeException("Option 'scannedPaths' > '$k' must be string (config file '$configFile').");
-						}
-
-						$checkerConfig->addScannedPath($scannedPaths);
 					}
 				}
 

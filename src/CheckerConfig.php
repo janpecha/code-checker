@@ -26,9 +26,6 @@
 		private $paths = [];
 
 		/** @var string[] */
-		private $scannedPaths = [];
-
-		/** @var string[] */
 		private $ignore = [];
 
 		/** @var Extension[] */
@@ -213,30 +210,6 @@
 		public function addPath(string $path): self
 		{
 			$this->paths[] = $this->processPath($path);
-			return $this;
-		}
-
-
-		/**
-		 * @return string[]
-		 */
-		public function getScannedPaths(): array
-		{
-			if (count($this->scannedPaths) === 0) {
-				$vendorDir = dirname($this->getComposerFile()->getPath()) . '/vendor';
-
-				if (is_dir($vendorDir)) {
-					return [$vendorDir];
-				}
-			}
-
-			return $this->scannedPaths;
-		}
-
-
-		public function addScannedPath(string $path): self
-		{
-			$this->scannedPaths[] = $this->processPath($path);
 			return $this;
 		}
 

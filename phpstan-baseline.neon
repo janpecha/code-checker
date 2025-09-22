@@ -55,18 +55,6 @@ parameters:
 			path: src/Engine.php
 
 		-
-			message: '#^Method JP\\CodeChecker\\Engine\:\:findScannedFiles\(\) return type with generic class AppendIterator does not specify its types\: TKey, TValue, TIterator$#'
-			identifier: missingType.generics
-			count: 1
-			path: src/Engine.php
-
-		-
-			message: '#^Method JP\\CodeChecker\\Engine\:\:findScannedFiles\(\) should return AppendIterator&iterable\<SplFileInfo\> but returns AppendIterator\<mixed, mixed, Iterator\<TKey, TValue\>\>\.$#'
-			identifier: return.type
-			count: 1
-			path: src/Engine.php
-
-		-
 			message: '#^Cannot access offset ''phpVersions'' on mixed\.$#'
 			identifier: offsetAccess.nonOffsetAccessible
 			count: 3

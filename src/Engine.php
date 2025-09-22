@@ -17,9 +17,6 @@
 		private $paths;
 
 		/** @var string[] */
-		private $scannedPaths;
-
-		/** @var string[] */
 		private $ignore;
 
 		/** @var bool */
@@ -46,13 +43,11 @@
 
 		/**
 		 * @param  string[] $paths
-		 * @param  string[] $scannedPaths
 		 * @param  string[] $ignore
 		 */
 		public function __construct(
 			string $projectDirectory,
 			array $paths,
-			array $scannedPaths,
 			array $ignore,
 			bool $readOnly,
 			bool $stepByStep,
@@ -63,7 +58,6 @@
 		{
 			$this->projectDirectory = $projectDirectory;
 			$this->paths = $paths;
-			$this->scannedPaths = $scannedPaths;
 			$this->ignore = $ignore;
 			$this->readOnly = $readOnly;
 			$this->stepByStep = $stepByStep;
@@ -225,33 +219,6 @@
 						->exclude(...$this->ignore)
 						->from($path)
 						->exclude(...$this->ignore)
-						->getIterator()
-				);
-			}
-
-			return $iterator;
-		}
-
-
-		/**
-		 * Find analyzed files & scanned files
-		 * @param  string|string[] $masks
-		 * @return \AppendIterator<\SplFileInfo>
-		 */
-		public function findScannedFiles($masks): \AppendIterator
-		{
-			if (!is_array($masks)) {
-				$masks = [$masks];
-			}
-
-			$iterator = new \AppendIterator;
-
-			foreach ($this->scannedPaths as $path) {
-				$iterator->append(
-					is_file($path)
-					? new \ArrayIterator([$path])
-					: \Nette\Utils\Finder::findFiles(...$masks)
-						->from($path)
 						->getIterator()
 				);
 			}

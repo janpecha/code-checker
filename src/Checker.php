@@ -16,9 +16,6 @@
 		private $paths = [];
 
 		/** @var string[] */
-		private $scannedPaths = [];
-
-		/** @var string[] */
 		private $accept = [];
 
 		/** @var string[] */
@@ -36,7 +33,6 @@
 
 		/**
 		 * @param string[] $paths
-		 * @param string[] $scannedPaths
 		 * @param string[] $accept
 		 * @param string[] $ignore
 		 * @param Extension[] $extensions
@@ -45,7 +41,6 @@
 		public function __construct(
 			string $projectDirectory,
 			array $paths,
-			array $scannedPaths,
 			array $ignore,
 			array $extensions,
 			?GitPhp\Git $git = NULL,
@@ -55,7 +50,6 @@
 		{
 			$this->projectDirectory = $projectDirectory;
 			$this->paths = $paths;
-			$this->scannedPaths = $scannedPaths;
 			$this->accept = $accept;
 			$this->ignore = $ignore;
 			$this->extensions = $extensions;
@@ -77,7 +71,6 @@
 			$engine = new Engine(
 				$this->projectDirectory,
 				$this->paths,
-				$this->scannedPaths,
 				$this->ignore,
 				$readOnly,
 				$stepByStep,
