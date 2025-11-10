@@ -10,6 +10,9 @@
 	use JP\CodeChecker\Rules\PhpReflectionRule;
 
 
+	/**
+	 * @broken
+	 */
 	class PhpNullableParameterFixerRule implements PhpReflectionRule
 	{
 		public function getCommitMessage(): ?CommitMessage

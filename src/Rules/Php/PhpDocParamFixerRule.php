@@ -10,6 +10,9 @@
 	use JP\CodeChecker\Rules\PhpReflectionRule;
 
 
+	/**
+	 * @broken PHPDoc parser reformats comments
+	 */
 	class PhpDocParamFixerRule implements PhpReflectionRule
 	{
 		public function getCommitMessage(): ?CommitMessage
