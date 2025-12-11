@@ -27,6 +27,6 @@ test('invalid syntax', function () {
 	$rule->processFile($file);
 
 	Assert::equal([
-		new ResultMessage(ResultType::Error, 'Unexpected \':\' on line 1, column 5.', 1),
+		new ResultMessage(ResultType::Error, 'Unexpected \':\' on line 1 at column 5', 1),
 	], $file->getResult());
 });

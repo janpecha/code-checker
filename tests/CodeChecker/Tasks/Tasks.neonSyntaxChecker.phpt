@@ -21,6 +21,6 @@ test('Invalid', function () {
 	$file = new File('file.neon', 'a: b: c');
 	Tasks::neonSyntaxChecker($file);
 	Assert::equal([
-		new ResultMessage(ResultType::Error, 'Unexpected \':\' on line 1, column 5.', 1),
+		new ResultMessage(ResultType::Error, 'Unexpected \':\' on line 1 at column 5', 1),
 	], $file->getResult());
 });
