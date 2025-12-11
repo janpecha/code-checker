@@ -136,7 +136,6 @@
 			}
 
 			$progressBar->reset();
-			$files = $engine->findFiles($this->accept);
 
 			if ($stepByStep || $gitSupport) {
 				foreach ($processors as $processor) {
@@ -146,6 +145,8 @@
 					if ($commitMessage !== NULL && $gitRepository !== NULL && $gitRepository->hasChanges()) {
 						$engine->commit('CodeChecker fixes');
 					}
+
+					$files = $engine->findFiles($this->accept);
 
 					foreach ($files as $file) {
 						$progressBar->progress();
@@ -168,6 +169,8 @@
 				}
 
 			} else {
+				$files = $engine->findFiles($this->accept);
+
 				foreach ($files as $file) {
 					$progressBar->progress();
 					$this->processFile(
