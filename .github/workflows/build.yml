@@ -22,4 +22,4 @@ jobs:
         uses: janpecha/actions/.github/workflows/phpstan.yml@master
         with:
             phpVersions: '["8.2", "8.3", "8.4"]'
-            extensions: 'phpstan/phpstan-nette'
+            extensions: phpstan/phpstan-nette
