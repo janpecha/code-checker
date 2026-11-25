@@ -73,7 +73,7 @@ parameters:
 			path: src/Extensions/JanpechaActionsExtension.php
 
 		-
-			message: '#^Parameter \#1 \$yaml of method JP\\CodeChecker\\Extensions\\JanpechaActionsExtension\:\:createTestsJob\(\) expects array\<string, mixed\>, array given\.$#'
+			message: '#^Parameter \#1 \$yaml of method JP\\CodeChecker\\Extensions\\JanpechaActionsExtension\:\:createTestsJob\(\) expects array\<string, mixed\>, array(\<mixed\>)? given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Extensions/JanpechaActionsExtension.php
